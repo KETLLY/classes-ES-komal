@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Komal's Spanish Journey — A2 to B1</title>
+<style>
+:root{
+  --pink:#F92B75; --pink-light:#FDE7EE; --blue:#2E5AAC; --blue-light:#E8F0FE;
+  --green:#1B8A5A; --green-light:#E6F6EE;
+  --ink:#1A1A1A; --gray:#6B6B6B; --bg:#F5F6F8; --card:#FFFFFF; --border:#E6E6E8;
+}
+*{box-sizing:border-box;}
+body{font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;margin:0;background:var(--bg);color:var(--ink);}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh;max-width:1280px;margin:0 auto;}
+
+/* SIDEBAR */
+.sidebar{background:var(--card);border-right:1px solid var(--border);padding:28px 20px;position:sticky;top:0;height:100vh;}
+.sidebar-profile{display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+.avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#FFB86B,#F92B75);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:16px;flex-shrink:0;}
+.sidebar-name{font-weight:700;font-size:15px;}
+.sidebar-sub{font-size:11.5px;color:var(--gray);}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px;color:var(--gray);margin-bottom:4px;}
+.nav-item:hover{background:var(--bg);}
+.nav-item.active{background:var(--pink-light);color:var(--pink);}
+.nav-item .icon{font-size:16px;}
+
+/* MAIN */
+main{padding:32px 40px;max-width:920px;}
+.view{display:none;}
+.view.active{display:block;animation:fadein .2s;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+h1.page-title{font-size:24px;margin:0 0 6px;}
+.page-sub{color:var(--gray);font-size:14px;margin-bottom:24px;}
+
+.stats-row{display:flex;gap:16px;margin-bottom:24px;}
+.stat-box{flex:1;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;}
+.stat-num{font-size:26px;font-weight:800;color:var(--pink);}
+.stat-label{font-size:12px;color:var(--gray);margin-top:4px;}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px 26px;margin-bottom:18px;}
+.card h3{margin:0 0 12px;font-size:16px;}
+
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.chip{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:13.5px;font-weight:500;}
+.chip.pink{background:var(--pink-light);color:var(--pink);border:none;}
+.chip.blue{background:var(--blue-light);color:var(--blue);border:none;}
+
+.bio-box{background:var(--pink-light);border-radius:16px;padding:20px 24px;margin-bottom:18px;font-size:14px;line-height:1.6;color:#4a1030;}
+.bio-box strong{color:var(--pink);}
+.warning{background:#FFF4E5;border-left:4px solid #E07856;padding:14px 18px;border-radius:0 12px 12px 0;font-size:13px;margin-bottom:18px;color:#5c3a1a;}
+
+.next-class-card{background:linear-gradient(135deg,#F92B75,#FF6FA0);border-radius:16px;padding:22px 26px;margin-bottom:20px;color:white;display:flex;justify-content:space-between;align-items:center;gap:20px;}
+.next-class-card .label{font-size:11.5px;opacity:0.9;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;}
+.next-class-card .title{font-size:19px;font-weight:800;margin:4px 0 8px;}
+.next-class-card .lo{font-size:13px;opacity:0.95;line-height:1.5;max-width:520px;}
+.next-class-card button{background:white;color:var(--pink);border:none;padding:10px 20px;border-radius:20px;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0;}
+
+.progress-item{margin-bottom:16px;}
+.progress-label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:6px;}
+.progress-bar-bg{height:10px;background:var(--border);border-radius:6px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,#F92B75,#FF8FB2);border-radius:6px;transition:width .3s;}
+
+.week-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+.week-accordion{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--card);}
+.week-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;cursor:pointer;font-weight:600;font-size:14.5px;}
+.week-head:hover{background:var(--bg);}
+.week-num{color:var(--pink);font-weight:800;margin-right:8px;}
+.week-freq{font-size:11.5px;color:var(--gray);font-weight:500;margin-left:10px;}
+.week-body{display:none;padding:0 20px 18px;}
+.week-body.open{display:block;}
+.arrow{transition:transform 0.2s;font-size:12px;color:var(--gray);}
+.arrow.rot{transform:rotate(180deg);}
+
+.class-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;}
+.class-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 18px;}
+.class-card.highlight{border:2px solid var(--pink);background:var(--pink-light);}
+.class-card.done{opacity:0.55;}
+.class-title{display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:14px;margin-bottom:4px;}
+.class-title .tag{background:var(--blue-light);color:var(--blue);font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:8px;}
+.class-title .tag.next{background:var(--pink);color:white;}
+.check-btn{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);background:white;cursor:pointer;flex-shrink:0;}
+.check-btn.checked{background:var(--green);border-color:var(--green);color:white;font-size:13px;text-align:center;line-height:20px;}
+.lo{font-size:13px;color:var(--ink);margin:8px 0;padding:8px 10px;background:var(--blue-light);border-radius:8px;}
+.lo strong{color:var(--blue);}
+ul.content-list{margin:6px 0 0;padding-left:16px;font-size:12.5px;color:var(--gray);}
+ul.content-list li{margin-bottom:3px;}
+
+.lesson-phase{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px dashed var(--border);}
+.lesson-phase:last-child{border-bottom:none;}
+.phase-time{background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:700;padding:4px 12px;border-radius:10px;min-width:60px;text-align:center;}
+.phase-text strong{display:block;font-size:14px;}
+.phase-text span{font-size:13px;color:var(--gray);}
+ul.clean{margin:8px 0 0;padding-left:18px;font-size:13.5px;color:var(--gray);}
+ul.clean li{margin-bottom:5px;}
+
+@media (max-width: 800px){
+  .app{grid-template-columns:1fr;}
+  .sidebar{position:relative;height:auto;display:flex;align-items:center;gap:16px;padding:16px 20px;}
+  .sidebar-profile{margin-bottom:0;}
+  .nav-item{display:none;}
+  .class-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sidebar-profile">
+      <div class="avatar">KD</div>
+      <div>
+        <div class="sidebar-name">Komal D.</div>
+        <div class="sidebar-sub">A2 → B1 · Spanish Journey</div>
+      </div>
+    </div>
+    <div class="nav-item active" data-view="home" onclick="goToView('home')"><span class="icon">🏠</span> Home / Inicio</div>
+    <div class="nav-item" data-view="needs" onclick="goToView('needs')"><span class="icon">🎯</span> Mis Needs / Goals</div>
+    <div class="nav-item" data-view="curriculum" onclick="goToView('curriculum')"><span class="icon">📚</span> Curriculum / Plan</div>
+    <div class="nav-item" data-view="lesson" onclick="goToView('lesson')"><span class="icon">⏱️</span> Lesson Format</div>
+  </aside>
+
+  <main>
+
+    <!-- HOME -->
+    <div class="view active" id="view-home">
+      <h1 class="page-title">Hola Komal, welcome a tu Spanish Journey! 👋</h1>
+      <p class="page-sub">Aquí puedes ver tu progress, tu próxima clase, y todo el plan completo — A2 to B1 en 3 months.</p>
+
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-num">24</div><div class="stat-label">Total classes</div></div>
+        <div class="stat-num" id="stat-done-wrap"></div>
+        <div class="stat-box"><div class="stat-num" id="stat-done">0</div><div class="stat-label">Completed</div></div>
+        <div class="stat-box"><div class="stat-num">2</div><div class="stat-label">Classes/week</div></div>
+      </div>
+
+      <div class="next-class-card">
+        <div>
+          <div class="label">Next class / Próxima clase</div>
+          <div class="title" id="next-class-title">Class 6: Spanish in the Workplace</div>
+          <div class="lo" id="next-class-lo">Vas a aprender vocabulary y phrases para hablar de meetings, tasks, y colleagues en español — perfecto para tu trabajo como IT Developer.</div>
+        </div>
+        <button onclick="goToView('curriculum'); openWeekWithClass(6);">Ver detalle →</button>
+      </div>
+
+      <div class="bio-box">
+        <strong>About Komal:</strong> "Hello Ketlly, I am Komal, currently living in Bogotá, Colombia and working as an IT Developer for an MNC. I would like to learn Spanish for day-to-day conversations y get a good knowledge del language para connect with people y understand culture better. My goal is fluency — to speak y understand better."
+      </div>
+
+      <div class="warning">
+        <strong>Nota importante / Important note:</strong> con 2 classes/week (~24 classes, 15-20 horas totales) en 3 months, llegar a full B1 no es 100% alcanzable según Instituto Cervantes / Cambridge English (que require 90-200 hours). Esta app busca functional B1 en los contextos prioritarios de Komal: work, travel, culture. Self-study entre classes is recommended para close the gap.
+      </div>
+
+      <div class="card">
+        <h3>Tu progress general / Your overall progress</h3>
+        <div class="progress-item">
+          <div class="progress-label"><span>Continuous conversation en español</span><span>Target: 20 min</span></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:0%;"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>Past-tense narration (weekend/trip)</span><span>Target: 10 sentences</span></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:0%;"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>Travel & culture comprehension</span><span>Basic → Intermediate</span></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:0%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEEDS -->
+    <div class="view" id="view-needs">
+      <h1 class="page-title">Mis Learning Needs</h1>
+      <p class="page-sub">Esto es lo que definiste cuando empezamos — tu profile completo de goals y preferences.</p>
+
+      <div class="card">
+        <h3>My goal en español</h3>
+        <div class="chip-row"><span class="chip pink">Culture, travel & hobbies</span></div>
+      </div>
+      <div class="card">
+        <h3>I want to focus on</h3>
+        <div class="chip-row">
+          <span class="chip blue">🗣️ Fluency</span>
+          <span class="chip blue">😎 Confidence</span>
+          <span class="chip blue">🎯 Accuracy</span>
+          <span class="chip blue">🔤 Vocabulary</span>
+          <span class="chip blue">👄 Pronunciation</span>
+          <span class="chip blue">👂 Listening comprehension</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>My native language</h3>
+        <div class="chip-row"><span class="chip">Telugu</span></div>
+        <h3 style="margin-top:16px;">I also speak</h3>
+        <div class="chip-row"><span class="chip">English</span><span class="chip">Hindi</span></div>
+      </div>
+      <div class="card">
+        <h3>My Spanish level · Self-assessment</h3>
+        <div class="chip-row"><span class="chip pink">A2 (Basic)</span></div>
+      </div>
+      <div class="card">
+        <h3>Class frequency</h3>
+        <div class="chip-row"><span class="chip pink">2 classes per week</span></div>
+      </div>
+    </div>
+
+    <!-- CURRICULUM -->
+    <div class="view" id="view-curriculum">
+      <h1 class="page-title">Tu Curriculum completo</h1>
+      <p class="page-sub">12 weeks, 2 classes por week, 24 classes total. Click en cada semana para ver el detalle y marcar tu progress.</p>
+      <div class="week-grid" id="accordion-list"></div>
+    </div>
+
+    <!-- LESSON FORMAT -->
+    <div class="view" id="view-lesson">
+      <h1 class="page-title">Cómo funciona cada clase</h1>
+      <p class="page-sub">Este es el formato standard que vamos a usar en every single class, 50 minutos.</p>
+
+      <div class="card">
+        <h3>Standard 50-Minute Lesson Format</h3>
+        <div class="lesson-phase"><span class="phase-time">5 min</span><div class="phase-text"><strong>Opening / Apertura</strong><span>Short check-in en español + warm-up question sobre Bogotá, work, o travel.</span></div></div>
+        <div class="lesson-phase"><span class="phase-time">10 min</span><div class="phase-text"><strong>Guided Input</strong><span>La profesora presenta un place/situation/short text y introduce key vocabulary en context.</span></div></div>
+        <div class="lesson-phase"><span class="phase-time">20 min</span><div class="phase-text"><strong>Controlled Practice</strong><span>Roleplays, Q&A, repetition de useful chunks, selective correction.</span></div></div>
+        <div class="lesson-phase"><span class="phase-time">10 min</span><div class="phase-text"><strong>Free Production</strong><span>Komal talks about her experience, plans, o opinions connected al theme.</span></div></div>
+        <div class="lesson-phase"><span class="phase-time">5 min</span><div class="phase-text"><strong>Closure & Planning</strong><span>Summary de easy/difficult points + next theme + optional small task.</span></div></div>
+      </div>
+
+      <div class="card">
+        <h3>How each class is structured</h3>
+        <ul class="clean">
+          <li>Every week covers <strong>one theme</strong>, split across <strong>2 classes</strong>.</li>
+          <li>Each class has su own <strong>learning outcome</strong> (lo que Komal will be able to do al terminar).</li>
+          <li>Each class lists el <strong>specific language content</strong> (grammar, vocabulary, functional phrases).</li>
+          <li>Progress metrics se revisan en Weeks 4, 8, y 12 (checkpoints).</li>
+        </ul>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const weeks = [[1, "Bogotá tourist spots & basic questions", [["Class 1", "Getting to know Bogotá", "Komal will be able to ask and answer basic questions about famous places in Bogotá.", ["Use hay / está / queda para location (dónde está algo)", "Ask ¿Qué es...? ¿Dónde está...? ¿Cómo se llega a...?", "Vocabulary: Monserrate, La Candelaria, Plaza de Bolívar, Museo del Oro"]], ["Class 2", "Describing a place", "Komal will be able to describe a place using simple adjectives.", ["Use ser/estar + adjective para describir lugares", "Practice ¿Cómo es...? + adjective", "Vocabulary: bonito, histórico, tranquilo, lleno de gente"]]]], [2, "Transport and directions in Bogotá", [["Class 3", "Getting around the city", "Komal will understand and give simple directions usando vocabulario de transporte público.", ["Vocabulary: Transmilenio, bus, taxi, estación, ruta", "Use hay que + infinitive para instructions", "Practice imperative forms: gire, siga, cruce"]], ["Class 4", "Asking for directions", "Komal will be able to ask for and follow directions in a real-life roleplay.", ["Consolidate ¿Cómo llego a...? / ¿Está lejos?", "Prepositions of place: a la derecha, al lado de, cerca de", "Roleplay: asking a stranger for directions"]]]], [3, "Daily routine and work in IT", [["Class 5", "My workday", "Komal will describe a typical workday using present tense y expresiones de tiempo.", ["Review present tense regular/irregular verbs", "Time expressions: por la mañana, a las nueve, después de", "Vocabulary: reunión, proyecto, código, equipo"]], ["Class 6", "Spanish in the Workplace", "Komal will use basic workplace vocabulary and phrases to talk about meetings, tasks, and colleagues in Spanish.", ["Vocabulary: reunión, tarea, plazo, jefe, colega, entregar, revisar", "Functional phrases: Tengo una reunión a las..., Necesito terminar..., ¿Puedes ayudarme con...?", "Short roleplay: a work check-in conversation"]]]], [4, "One full day in Bogotá (integration)", [["Class 7", "Planning a day out", "Komal will plan and narrate a simple itinerary using future/near-future forms.", ["Use ir a + infinitive para plans", "Sequencing words: primero, luego, después, finalmente", "Integrate Weeks 1-3 vocabulary"]], ["Class 8", "Telling the story of my day", "Komal will narrate a full day combinando transport, places, and routine vocabulary con minimal hesitation.", ["Fluency practice: 3-5 minute monologue", "Listening: short audio about someone's day in Bogotá", "Review and correct frequent errors from Weeks 1-3"]]]], [5, "Restaurants and Colombian food", [["Class 9", "Ordering food", "Komal will order food and drinks y understand a simple menu.", ["Vocabulary: plato, bebida, cuenta, propina", "Functional phrases: Quisiera..., ¿Qué me recomienda?", "Typical dishes: ajiaco, bandeja paisa, arepa"]], ["Class 10", "Talking about preferences", "Komal will express food preferences and dietary needs clearly.", ["Use me gusta / no me gusta / prefiero + noun", "Vocabulary: vegetariano, alérgico a, sin gluten", "Roleplay: ordering with a dietary restriction"]]]], [6, "Going out to eat — past tense", [["Class 11", "Introducing the past tense", "Komal will form and use regular preterite verbs para talk about a past event.", ["Preterite conjugation: -ar/-er/-ir regular verbs", "Time markers: ayer, el fin de semana pasado", "Vocabulary review: restaurant experience"]], ["Class 12", "Narrating a restaurant visit", "Komal will narrate a past restaurant experience en 5+ coherent sentences.", ["Preterite of irregular verbs: ir, ser, comer, pedir", "Express opinions: me gustó, no me gustó, estuvo delicioso", "Guided narration practice"]]]], [7, "Short trip near Bogotá", [["Class 13", "Planning a day trip", "Komal will discuss and plan a short trip using vocabulary for nearby destinations.", ["Vocabulary: excursión, boleto, salida, regreso", "Use podríamos / deberíamos para suggestions", "Destination: Catedral de Sal de Zipaquirá"]], ["Class 14", "Organizing logistics", "Komal will ask and answer questions about schedules, transport, and costs para a trip.", ["Functional language: ¿A qué hora sale...? ¿Cuánto cuesta...?", "Numbers and time review", "Roleplay: buying a bus ticket"]]]], [8, "Narrating a full weekend", [["Class 15", "From Friday to Sunday", "Komal will narrate a sequence of past events across multiple days.", ["Combine preterite with sequencing words: el viernes, el sábado, el domingo", "Vocabulary: plan, salida, descanso", "Structuring a multi-day narration"]], ["Class 16", "Highlights, problems and emotions", "Komal will express opinions and emotions about past experiences con appropriate vocabulary.", ["Emotion vocabulary: me sentí, fue increíble, fue estresante", "Contrast pero / aunque / sin embargo", "10-sentence weekend narration (progress metric checkpoint)"]]]], [9, "Social life in Bogotá", [["Class 17", "Friends, colleagues and plans", "Komal will talk about social relationships and typical social activities in Bogotá.", ["Vocabulary: amigo, colega, plan, salida, reunión social", "Review present + near-future para plans", "Discuss typical social events (asado, rumba, cine)"]], ["Class 18", "Making and accepting invitations", "Komal will make, accept, and decline an invitation appropriately en español.", ["Functional phrases: ¿Quieres ir a...? Me encantaría, pero... Claro, ¿a qué hora?", "Politeness register basics", "Roleplay: inviting a colleague to an event"]]]], [10, "Work and technology", [["Class 19", "My role as a developer", "Komal will explain her professional role and daily tasks using specialized vocabulary.", ["IT vocabulary: código, programa, error, actualización, servidor", "Use present tense to describe responsibilities", "Short presentation: 'Mi trabajo como developer'"]], ["Class 20", "Remote work vs. office work", "Komal will compare two work situations using comparative structures.", ["Comparatives: más...que, menos...que, tan...como", "Vocabulary: trabajo remoto, oficina, flexibilidad, productividad", "Opinion practice: ventajas y desventajas"]]]], [11, "City and culture — pros and cons", [["Class 21", "Living in Bogotá", "Komal will express opinions about advantages and disadvantages of living in a city.", ["Opinion structures: creo que, en mi opinión, me parece que", "Vocabulary: seguridad, clima, tráfico, cultura, costo de vida", "Discussion practice"]], ["Class 22", "Comparing cultures", "Komal will compare cultural aspects of Bogotá con another city or country using comparative language.", ["Consolidate comparatives and opinion language", "Vocabulary: costumbre, tradición, comida, gente", "Structured comparison: Bogotá vs. Komal's home city"]]]], [12, "Full-day simulation: Komal en español", [["Class 23", "A full day, start to finish", "Komal will narrate a complete day combinando past, present and future tenses con minimal switching to English.", ["Integrate all tenses studied", "20-minute continuous conversation checkpoint (progress metric)", "Self-correction practice"]], ["Class 24", "Reflection and next steps", "Komal will reflect on her personal progress and identify next learning goals en español.", ["Vocabulary for self-reflection: he mejorado, todavía me cuesta, quiero aprender", "Review of all progress metrics", "Personalized recommendations for continued study"]]]]];
+const currentClass = 6;
+const STORAGE_KEY = "komal_spanish_progress";
+
+function loadProgress(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){ return {}; }
+}
+function saveProgress(p){ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }
+let progress = loadProgress();
+
+function toggleClassDone(classNum){
+  progress[classNum] = !progress[classNum];
+  saveProgress(progress);
+  renderCurriculum();
+  updateStats();
+}
+
+function updateStats(){
+  const doneCount = Object.values(progress).filter(Boolean).length;
+  document.getElementById('stat-done').textContent = doneCount;
+}
+
+function renderCurriculum(){
+  const list = document.getElementById('accordion-list');
+  list.innerHTML = '';
+  weeks.forEach((w,i)=>{
+    const [weekNum, theme, classes] = w;
+    const classesHtml = classes.map(c=>{
+      const [label, title, lo, content] = c;
+      const classNum = parseInt(label.match(/\d+/)[0]);
+      const isNext = classNum === currentClass;
+      const isDone = !!progress[classNum];
+      const contentHtml = content.map(x=>`<li>${x}</li>`).join('');
+      return `
+      <div class="class-card ${isNext ? 'highlight' : ''} ${isDone ? 'done' : ''}">
+        <div class="class-title">
+          <span><span class="tag ${isNext ? 'next' : ''}">${isNext ? 'NEXT' : label}</span> ${title}</span>
+          <button class="check-btn ${isDone ? 'checked' : ''}" onclick="toggleClassDone(${classNum})">${isDone ? '✓' : ''}</button>
+        </div>
+        <div class="lo"><strong>Learning outcome:</strong> ${lo}</div>
+        <ul class="content-list">${contentHtml}</ul>
+      </div>`;
+    }).join('');
+
+    const item = document.createElement('div');
+    item.className='week-accordion';
+    item.id = `week-${weekNum}`;
+    item.innerHTML = `
+      <div class="week-head" onclick="toggleWeek(${i})">
+        <span><span class="week-num">Week ${weekNum}</span>${theme}<span class="week-freq">(2 classes)</span></span>
+        <span class="arrow" id="arrow-${i}">▼</span>
+      </div>
+      <div class="week-body" id="body-${i}">
+        <div class="class-grid">${classesHtml}</div>
+      </div>`;
+    list.appendChild(item);
+  });
+
+  weeks.forEach((w,i)=>{
+    const hasNext = w[2].some(c=> parseInt(c[0].match(/\d+/)[0]) === currentClass);
+    if(hasNext){
+      document.getElementById('body-'+i).classList.add('open');
+      document.getElementById('arrow-'+i).classList.add('rot');
+    }
+  });
+}
+
+function toggleWeek(i){
+  document.getElementById('body-'+i).classList.toggle('open');
+  document.getElementById('arrow-'+i).classList.toggle('rot');
+}
+
+function openWeekWithClass(classNum){
+  weeks.forEach((w,i)=>{
+    const has = w[2].some(c=> parseInt(c[0].match(/\d+/)[0]) === classNum);
+    if(has){
+      document.getElementById('body-'+i).classList.add('open');
+      document.getElementById('arrow-'+i).classList.add('rot');
+    }
+  });
+}
+
+function goToView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.nav-item[data-view="${name}"]`).classList.add('active');
+}
+
+renderCurriculum();
+updateStats();
+</script>
+</body>
+</html>
