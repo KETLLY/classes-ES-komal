@@ -1,2 +1,2 @@
-# classes-espa-ol-komal
+# classes-komal
 Spanish learning journey app for Komal — A2 to B1 in 3 months
