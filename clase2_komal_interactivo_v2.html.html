@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Komal - Clase 2: Spanish in the Workplace (IT Developer)</title>
+<style>
+:root{
+  --pink:#F92B75; --pink-light:#FDE7EE; --dark:#1a1a2e; --gray:#666;
+  --bg:#faf9fb; --card-bg:#fff; --border:#e8e4ec;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--dark); padding:0;}
+header{background:linear-gradient(135deg,var(--pink),#ff6b9d); color:#fff; padding:24px 20px; text-align:center;}
+header h1{font-size:1.4rem; margin-bottom:4px;}
+header p{opacity:0.9; font-size:0.9rem;}
+nav{display:flex; overflow-x:auto; background:#fff; border-bottom:2px solid var(--border); position:sticky; top:0; z-index:10;}
+.nav-item{flex:1; padding:14px 8px; text-align:center; cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gray); border-bottom:3px solid transparent; white-space:nowrap; min-width:110px;}
+.nav-item.active{color:var(--pink); border-bottom-color:var(--pink);}
+main{max-width:800px; margin:0 auto; padding:20px 16px 60px;}
+.view{display:none;}
+.view.active{display:block;}
+.card{background:var(--card-bg); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+.card h2{font-size:1.05rem; margin-bottom:8px; color:var(--pink);}
+.sub{font-size:0.75rem; color:var(--gray); font-style:italic; display:block; margin-top:2px;}
+.badge{display:inline-block; background:var(--pink-light); color:var(--pink); font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:20px; margin-bottom:8px;}
+.outcome{background:var(--pink-light); border-left:4px solid var(--pink); padding:14px; border-radius:8px; font-size:0.95rem; line-height:1.5;}
+.outcome .sub{margin-top:8px; font-size:0.8rem;}
+table{width:100%; border-collapse:collapse; margin-top:10px; font-size:0.85rem;}
+th,td{padding:8px 6px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+th{color:var(--gray); font-weight:600; font-size:0.78rem;}
+.flash-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;}
+@media(max-width:520px){.flash-grid{grid-template-columns:1fr;}}
+.flashcard{background:var(--card-bg); border:2px solid var(--border); border-radius:12px; height:110px; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px; cursor:pointer; perspective:600px; position:relative; transition:0.2s;}
+.flashcard:hover{border-color:var(--pink);}
+.fc-inner{width:100%; transition:transform 0.5s; transform-style:preserve-3d; position:relative;}
+.flashcard.flipped .fc-inner{transform:rotateY(180deg);}
+.fc-face{position:absolute; width:100%; backface-visibility:hidden; font-size:0.95rem; font-weight:600; padding:4px;}
+.fc-front{color:var(--dark);}
+.fc-back{transform:rotateY(180deg); color:var(--pink); font-weight:700;}
+.progress-bar{background:var(--border); height:8px; border-radius:6px; overflow:hidden; margin-top:6px;}
+.progress-fill{background:var(--pink); height:100%; transition:width 0.3s;}
+.roleplay-box{background:#fff; border:2px dashed var(--pink); border-radius:10px; padding:14px; margin-top:10px;}
+.role-line{margin:8px 0; font-size:0.9rem;}
+.role-line b{color:var(--pink);}
+.role-line .sub{margin-top:1px;}
+.chip-wrap{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
+.chip{display:inline-flex; flex-direction:column; background:var(--pink-light); color:var(--pink); font-size:0.78rem; padding:5px 10px; border-radius:14px; line-height:1.3;}
+.chip .sub{color:var(--gray); font-size:0.68rem;}
+.filter-btn{background:#fff; border:2px solid var(--border); color:var(--gray); font-size:0.8rem; padding:6px 12px; border-radius:16px; cursor:pointer; font-weight:600; display:flex; flex-direction:column; align-items:center; line-height:1.3;}
+.filter-btn.active-filter{background:var(--pink); color:#fff; border-color:var(--pink);}
+.check-btn{background:var(--pink); color:#fff; border:none; padding:8px 14px; border-radius:20px; font-size:0.8rem; cursor:pointer; margin-top:10px; font-weight:600;}
+.check-btn:hover{opacity:0.9;}
+.timer-block{display:flex; justify-content:space-between; align-items:center; background:var(--pink-light); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:0.85rem;}
+.timer-block .txt{display:flex; flex-direction:column;}
+.timer-block .min{font-weight:700; color:var(--pink); white-space:nowrap; padding-left:10px;}
+.note{background:#FFF8E1; border-left:4px solid #F5A623; padding:12px; border-radius:8px; font-size:0.85rem; margin-top:14px;}
+.note .sub{margin-top:6px;}
+footer{text-align:center; padding:16px; color:var(--gray); font-size:0.75rem;}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Class 2: Spanish in the Workplace</h1>
+<p>Komal — IT Developer · A2 → B1 · Sesión interactiva de 50 min <span style="display:block; font-size:0.8rem; opacity:0.85;">(Interactive 50-min session)</span></p>
+</header>
+
+<nav>
+<div class="nav-item active" data-view="plan" onclick="showView('plan')">Plan de clase<span class="sub">Lesson plan</span></div>
+<div class="nav-item" data-view="vocab" onclick="showView('vocab')">Flashcards</div>
+<div class="nav-item" data-view="roleplay" onclick="showView('roleplay')">Roleplays</div>
+<div class="nav-item" data-view="progress" onclick="showView('progress')">Mi progreso<span class="sub">My progress</span></div>
+</nav>
+
+<main>
+
+<div class="view active" id="view-plan">
+  <div class="card">
+    <span class="badge">LEARNING OUTCOME</span>
+    <div class="outcome">
+      Al terminar esta clase, Komal podrá describir su rol técnico, narrar su rutina diaria de trabajo (código, reuniones, entregas) y participar en dos roleplays cortos típicos de su día a día como desarrollador: un check-in de equipo (standup) y una solicitud de ayuda técnica.
+      <span class="sub">By the end of this class, Komal will be able to describe her technical role, narrate her daily work routine (code, meetings, deliverables), and take part in two short roleplays typical of her day as a developer: a team check-in (standup) and a request for technical help.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Estructura de 50 minutos <span class="sub">50-minute structure</span></h2>
+    <div class="timer-block"><div class="txt">Warm-up: "¿En qué proyecto estás trabajando ahora?"<span class="sub">Warm-up: "What project are you working on now?"</span></div><span class="min">5 min</span></div>
+    <div class="timer-block"><div class="txt">Vocabulario técnico (tarjetas + conversación)<span class="sub">Technical vocabulary (flashcards + conversation)</span></div><span class="min">10 min</span></div>
+    <div class="timer-block"><div class="txt">Presente + rutina diaria real de Komal<span class="sub">Present tense + Komal's real daily routine</span></div><span class="min">8 min</span></div>
+    <div class="timer-block"><div class="txt">Roleplay 1: Standup diario<span class="sub">Roleplay 1: Daily standup</span></div><span class="min">10 min</span></div>
+    <div class="timer-block"><div class="txt">Roleplay 2: Reportar un bug / pedir ayuda<span class="sub">Roleplay 2: Reporting a bug / asking for help</span></div><span class="min">10 min</span></div>
+    <div class="timer-block"><div class="txt">Cierre: resumen libre de su día laboral<span class="sub">Wrap-up: free summary of her workday</span></div><span class="min">7 min</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Foco lingüístico <span class="sub">Language focus</span></h2>
+    <p style="font-size:0.9rem; line-height:1.5;">
+      Presente de indicativo, verbos de rutina laboral ("suelo", "me encargo de"), y frases de interacción técnica.
+      <span class="sub" style="display:block; margin-top:6px;">Present indicative, work-routine verbs ("I usually", "I'm in charge of"), and technical interaction phrases.</span>
+    </p>
+    <div class="chip-wrap">
+      <span class="chip">escribir código<span class="sub">to write code</span></span>
+      <span class="chip">revisar el código<span class="sub">to review the code</span></span>
+      <span class="chip">corregir un error<span class="sub">to fix a bug</span></span>
+      <span class="chip">hacer pruebas<span class="sub">to run tests</span></span>
+      <span class="chip">subir cambios<span class="sub">to push changes</span></span>
+      <span class="chip">reunión diaria<span class="sub">daily standup</span></span>
+      <span class="chip">fecha límite<span class="sub">deadline</span></span>
+    </div>
+  </div>
+
+  <div class="note">
+    Nota de rigor: esta clase es la sesión 2 de 24 en total (2/semana). Recuerda que ese ritmo cubre solo una fracción de las 90-120 horas que el Instituto Cervantes recomienda para pasar de A2 a B1, así que el autoestudio entre clases sigue siendo indispensable.
+    <span class="sub">Rigor note: this is class 2 of 24 total (2/week). Remember this pace covers only a fraction of the 90-120 hours the Instituto Cervantes recommends for A2 to B1, so self-study between classes is still essential.</span>
+  </div>
+</div>
+
+<div class="view" id="view-vocab">
+  <div class="card">
+    <h2>Vocabulario <span class="sub">Vocabulary</span></h2>
+    <p style="font-size:0.85rem; color:var(--gray);">Toca cada tarjeta para ver la traducción <span class="sub">Tap each card to see the translation</span></p>
+    <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+      <button class="filter-btn active-filter" id="filter-all" onclick="setFilter('all')">Todo <span class="sub" style="color:inherit;">(All)</span></button>
+      <button class="filter-btn" id="filter-tech" onclick="setFilter('tech')">Técnico <span class="sub" style="color:inherit;">(Technical)</span></button>
+      <button class="filter-btn" id="filter-daily" onclick="setFilter('daily')">Día a día <span class="sub" style="color:inherit;">(Daily office)</span></button>
+    </div>
+    <div class="flash-grid" id="flashgrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Frases de oficina — día a día <span class="sub">Office phrases — daily life</span></h2>
+    <div class="roleplay-box">
+      <div class="role-line"><b>Pedir permiso:</b> "¿Puedo salir un poco más temprano hoy?"<span class="sub">Asking permission: "Can I leave a bit earlier today?"</span></div>
+      <div class="role-line"><b>Pedir vacaciones:</b> "Quiero pedir vacaciones la próxima semana."<span class="sub">Requesting vacation: "I want to request vacation next week."</span></div>
+      <div class="role-line"><b>Agendar reunión:</b> "¿Podemos agendar una reunión para el jueves?"<span class="sub">Scheduling a meeting: "Can we schedule a meeting for Thursday?"</span></div>
+      <div class="role-line"><b>Seguimiento por correo:</b> "Te escribo para dar seguimiento a mi correo anterior."<span class="sub">Email follow-up: "I'm writing to follow up on my previous email."</span></div>
+      <div class="role-line"><b>Break/almuerzo:</b> "Voy a tomar un descanso, vuelvo en 15 minutos."<span class="sub">Break/lunch: "I'm going to take a break, I'll be back in 15 minutes."</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="view" id="view-roleplay">
+  <div class="card">
+    <h2>Roleplay 1: Reunión diaria (Standup) <span class="sub">Daily meeting (Standup)</span></h2>
+    <div class="roleplay-box">
+      <div class="role-line"><b>Tú (Scrum Master):</b> "Buenos días, ¿cómo va tu día?"<span class="sub">"Good morning, how's your day going?"</span></div>
+      <div class="role-line"><b>Komal:</b> "Ayer terminé la tarea de..., hoy voy a trabajar en..."<span class="sub">"Yesterday I finished the task of..., today I'm going to work on..."</span></div>
+      <div class="role-line"><b>Tú:</b> "¿Tienes algún problema o bloqueo?"<span class="sub">"Do you have any problem or blocker?"</span></div>
+      <div class="role-line"><b>Komal:</b> "Sí, tengo un problema con... / No, todo va bien."<span class="sub">"Yes, I have a problem with... / No, everything's fine."</span></div>
+      <div class="role-line"><b>Tú:</b> "¿Cuál es la fecha límite para esa tarea?"<span class="sub">"What's the deadline for that task?"</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Roleplay 2: Pedir ayuda técnica <span class="sub">Asking for technical help</span></h2>
+    <div class="roleplay-box">
+      <div class="role-line"><b>Komal:</b> "Perdón, ¿podrías ayudarme con esto?"<span class="sub">"Sorry, could you help me with this?"</span></div>
+      <div class="role-line"><b>Tú:</b> "Claro, ¿cuál es el problema exactamente?"<span class="sub">"Sure, what exactly is the problem?"</span></div>
+      <div class="role-line"><b>Komal:</b> "Hay un error en el código y no encuentro la causa."<span class="sub">"There's an error in the code and I can't find the cause."</span></div>
+      <div class="role-line"><b>Tú:</b> "¿Ya revisaste los últimos cambios que subiste?"<span class="sub">"Have you already checked the last changes you pushed?"</span></div>
+      <div class="role-line"><b>Komal:</b> "Todavía no, voy a revisarlo ahora."<span class="sub">"Not yet, I'll check it now."</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Producción libre (cierre) <span class="sub">Free production (wrap-up)</span></h2>
+    <p style="font-size:0.9rem;">
+      Pide a Komal que resuma su día laboral real en 3-4 frases, sin apoyo visual, usando al menos 3 palabras de esta clase.
+      <span class="sub" style="display:block; margin-top:6px;">Ask Komal to summarize her real workday in 3-4 sentences, without visual support, using at least 3 words from this class.</span>
+    </p>
+    <button class="check-btn" onclick="markDone()">Marcar clase 2 como completada</button>
+  </div>
+</div>
+
+<div class="view" id="view-progress">
+  <div class="card">
+    <h2>Progreso del curso <span class="sub">Course progress</span></h2>
+    <p style="font-size:0.85rem; color:var(--gray);">Clases completadas <span class="sub" style="display:inline;">(Classes completed)</span>: <span id="doneCount">0</span> / 24</p>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+</main>
+
+<footer>classes-ES-komal · Clase 2: Spanish in the Workplace</footer>
+
+<script>
+const vocab = [
+  {es:"escribir código", en:"to write code", cat:"tech"},
+  {es:"revisar el código", en:"to review the code", cat:"tech"},
+  {es:"corregir un error (bug)", en:"to fix a bug", cat:"tech"},
+  {es:"hacer pruebas", en:"to run tests", cat:"tech"},
+  {es:"subir cambios", en:"to push changes", cat:"tech"},
+  {es:"reunión diaria", en:"daily standup", cat:"tech"},
+  {es:"fecha límite", en:"deadline", cat:"tech"},
+  {es:"tarea asignada", en:"assigned task", cat:"tech"},
+  {es:"equipo de trabajo", en:"work team", cat:"tech"},
+  {es:"estar bloqueado", en:"to be blocked (stuck)", cat:"tech"},
+  {es:"enviar un correo", en:"to send an email", cat:"daily"},
+  {es:"responder un correo", en:"to reply to an email", cat:"daily"},
+  {es:"sala de juntas", en:"meeting room", cat:"daily"},
+  {es:"agendar una reunión", en:"to schedule a meeting", cat:"daily"},
+  {es:"llegar tarde", en:"to arrive late", cat:"daily"},
+  {es:"salir temprano", en:"to leave early", cat:"daily"},
+  {es:"tomar un descanso", en:"to take a break", cat:"daily"},
+  {es:"pedir permiso", en:"to ask for permission/leave", cat:"daily"},
+  {es:"pedir vacaciones", en:"to request vacation days", cat:"daily"},
+  {es:"hacer horas extra", en:"to work overtime", cat:"daily"},
+  {es:"hora de almuerzo", en:"lunch time", cat:"daily"},
+  {es:"compañero de trabajo", en:"coworker", cat:"daily"},
+  {es:"jefe / jefa", en:"boss", cat:"daily"},
+  {es:"dar seguimiento", en:"to follow up", cat:"daily"}
+];
+
+let currentFilter = 'all';
+function renderFlashcards(){
+  const grid = document.getElementById('flashgrid');
+  const filtered = currentFilter==='all' ? vocab : vocab.filter(v=>v.cat===currentFilter);
+  grid.innerHTML = filtered.map((v,i)=>`
+    <div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-face fc-front">${v.es}</div>
+        <div class="fc-face fc-back">${v.en}</div>
+      </div>
+    </div>
+  `).join('');
+}
+function setFilter(f){
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active-filter'));
+  document.getElementById('filter-'+f).classList.add('active-filter');
+  renderFlashcards();
+}
+
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.nav-item[data-view="${name}"]`).classList.add('active');
+}
+
+function loadProgress(){
+  try{ return JSON.parse(localStorage.getItem('komalProgress')||'{}'); }catch(e){ return {}; }
+}
+function saveProgress(p){ localStorage.setItem('komalProgress', JSON.stringify(p)); }
+
+function markDone(){
+  const p = loadProgress();
+  p[2] = true;
+  saveProgress(p);
+  updateStats();
+  alert('Clase 2 marcada como completada ✔ / Class 2 marked as completed');
+}
+
+function updateStats(){
+  const p = loadProgress();
+  const count = Object.values(p).filter(Boolean).length;
+  document.getElementById('doneCount').textContent = count;
+  document.getElementById('progressFill').style.width = (count/24*100)+'%';
+}
+
+renderFlashcards();
+updateStats();
+</script>
+</body>
+</html>

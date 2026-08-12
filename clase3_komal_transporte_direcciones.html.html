@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Komal — Clase 3: Transporte y direcciones</title>
+  <style>
+    :root { --pink:#F92B75; --pink-light:#FDE7EE; --dark:#1a1a2e; --gray:#666; --bg:#faf9fb; --card-bg:#fff; --border:#e8e4ec; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--dark); padding:0; }
+    header { background:linear-gradient(135deg,var(--pink),#ff6b9d); color:#fff; padding:24px 20px; text-align:center; }
+    header h1 { font-size:1.4rem; margin-bottom:4px; }
+    header p { opacity:.9; font-size:.9rem; }
+    nav { display:flex; overflow-x:auto; background:#fff; border-bottom:2px solid var(--border); position:sticky; top:0; z-index:10; }
+    .nav-item { flex:1; padding:14px 8px; text-align:center; cursor:pointer; font-size:.85rem; font-weight:600; color:var(--gray); border-bottom:3px solid transparent; white-space:nowrap; min-width:112px; }
+    .nav-item.active { color:var(--pink); border-bottom-color:var(--pink); }
+    main { max-width:800px; margin:0 auto; padding:20px 16px 60px; }
+    .view { display:none; }
+    .view.active { display:block; }
+    .card { background:var(--card-bg); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .card h2 { font-size:1.05rem; margin-bottom:8px; color:var(--pink); }
+    .sub { font-size:.75rem; color:var(--gray); font-style:italic; display:block; margin-top:2px; }
+    .badge { display:inline-block; background:var(--pink-light); color:var(--pink); font-size:.75rem; font-weight:700; padding:3px 10px; border-radius:20px; margin-bottom:8px; }
+    .outcome { background:var(--pink-light); border-left:4px solid var(--pink); padding:14px; border-radius:8px; font-size:.95rem; line-height:1.5; }
+    .outcome .sub { margin-top:8px; font-size:.8rem; }
+    .timer-block { display:flex; justify-content:space-between; align-items:center; background:var(--pink-light); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:.85rem; }
+    .timer-block .txt { display:flex; flex-direction:column; }
+    .timer-block .min { font-weight:700; color:var(--pink); white-space:nowrap; padding-left:10px; }
+    .chip-wrap { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+    .chip { display:inline-flex; flex-direction:column; background:var(--pink-light); color:var(--pink); font-size:.78rem; padding:5px 10px; border-radius:14px; line-height:1.3; }
+    .chip .sub { color:var(--gray); font-size:.68rem; }
+    .flash-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+    @media(max-width:520px) { .flash-grid { grid-template-columns:1fr; } }
+    .flashcard { background:var(--card-bg); border:2px solid var(--border); border-radius:12px; height:110px; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px; cursor:pointer; perspective:600px; position:relative; transition:.2s; }
+    .flashcard:hover { border-color:var(--pink); }
+    .fc-inner { width:100%; transition:transform .5s; transform-style:preserve-3d; position:relative; }
+    .flashcard.flipped .fc-inner { transform:rotateY(180deg); }
+    .fc-face { position:absolute; width:100%; backface-visibility:hidden; font-size:.95rem; font-weight:600; padding:4px; }
+    .fc-front { color:var(--dark); }
+    .fc-back { transform:rotateY(180deg); color:var(--pink); font-weight:700; }
+    .filter-btn { background:#fff; border:2px solid var(--border); color:var(--gray); font-size:.8rem; padding:6px 12px; border-radius:16px; cursor:pointer; font-weight:600; display:flex; flex-direction:column; align-items:center; line-height:1.3; }
+    .filter-btn.active-filter { background:var(--pink); color:#fff; border-color:var(--pink); }
+    .roleplay-box { background:#fff; border:2px dashed var(--pink); border-radius:10px; padding:14px; margin-top:10px; }
+    .role-line { margin:8px 0; font-size:.9rem; line-height:1.35; }
+    .role-line b { color:var(--pink); }
+    .note { background:#FFF8E1; border-left:4px solid #F5A623; padding:12px; border-radius:8px; font-size:.85rem; margin-top:14px; line-height:1.45; }
+    .grammar-box { background:#F5F0FF; border-left:4px solid #7C3AED; padding:14px; border-radius:8px; font-size:.88rem; margin-top:10px; line-height:1.5; }
+    .grammar-box h3 { color:#7C3AED; font-size:.96rem; margin-bottom:8px; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; font-size:.82rem; }
+    th,td { padding:8px 6px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top; }
+    th { color:var(--gray); font-weight:600; font-size:.76rem; }
+    .check-btn { background:var(--pink); color:#fff; border:none; padding:8px 14px; border-radius:20px; font-size:.8rem; cursor:pointer; margin-top:10px; font-weight:600; }
+    .check-btn:hover { opacity:.9; }
+    .answer { width:100%; border:1px solid var(--border); border-radius:8px; padding:9px; margin-top:8px; font-family:inherit; font-size:.88rem; }
+    .feedback { margin-top:8px; min-height:20px; color:var(--pink); font-size:.85rem; font-weight:600; }
+    .progress-bar { background:var(--border); height:8px; border-radius:6px; overflow:hidden; margin-top:6px; }
+    .progress-fill { background:var(--pink); height:100%; transition:width .3s; }
+    footer { text-align:center; padding:16px; color:var(--gray); font-size:.75rem; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Clase 3 · Transporte y direcciones</h1>
+  <p>Komal · A2 → B1 · Sesión interactiva de 50 min<span style="display:block;font-size:.8rem;opacity:.85">Interactive 50-min session</span></p>
+</header>
+
+<nav>
+  <div class="nav-item active" data-view="plan" onclick="showView('plan')">Plan de clase<span class="sub">Lesson plan</span></div>
+  <div class="nav-item" data-view="vocab" onclick="showView('vocab')">Flashcards</div>
+  <div class="nav-item" data-view="roleplay" onclick="showView('roleplay')">Roleplays</div>
+  <div class="nav-item" data-view="grammar" onclick="showView('grammar')">Tips de gramática<span class="sub">Grammar tips</span></div>
+  <div class="nav-item" data-view="progress" onclick="showView('progress')">Mi progreso<span class="sub">My progress</span></div>
+</nav>
+
+<main>
+  <div class="view active" id="view-plan">
+    <div class="card">
+      <span class="badge">LEARNING OUTCOME</span>
+      <div class="outcome">
+        Al terminar esta clase, Komal podrá explicar cómo se desplaza por la ciudad, preguntar cómo llegar a un lugar y dar indicaciones sencillas para ir a una oficina, estación, banco o cita médica.
+        <span class="sub">By the end of this class, Komal will be able to explain how she gets around a city, ask how to get somewhere, and give simple directions to an office, station, bank, or medical appointment.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Estructura de 50 minutos <span class="sub">50-minute structure</span></h2>
+      <div class="timer-block"><div class="txt">Warm-up: “¿Cómo llegas normalmente al trabajo?”<span class="sub">Warm-up: “How do you usually get to work?”</span></div><span class="min">5 min</span></div>
+      <div class="timer-block"><div class="txt">Vocabulario de transporte y movilidad urbana<span class="sub">Transport and urban mobility vocabulary</span></div><span class="min">10 min</span></div>
+      <div class="timer-block"><div class="txt">Expresiones para pedir y dar direcciones<span class="sub">Expressions to ask for and give directions</span></div><span class="min">8 min</span></div>
+      <div class="timer-block"><div class="txt">Roleplay 1: Llegar a una reunión presencial<span class="sub">Roleplay 1: Getting to an in-person meeting</span></div><span class="min">10 min</span></div>
+      <div class="timer-block"><div class="txt">Roleplay 2: Pedir indicaciones en la ciudad<span class="sub">Roleplay 2: Asking for directions in the city</span></div><span class="min">10 min</span></div>
+      <div class="timer-block"><div class="txt">Cierre: ruta personal + tips de gramática<span class="sub">Wrap-up: personal route + grammar tips</span></div><span class="min">7 min</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Foco lingüístico <span class="sub">Language focus</span></h2>
+      <p style="font-size:.9rem;line-height:1.5">Preposición <strong>en</strong> para hablar de medios de transporte, expresiones de ubicación y el imperativo afirmativo para dar indicaciones: <strong>sigue, gira, toma, cruza</strong>.<span class="sub" style="display:block;margin-top:6px">The preposition <strong>en</strong> for transport, location expressions, and the affirmative imperative to give directions: <strong>keep going, turn, take, cross</strong>.</span></p>
+      <div class="chip-wrap">
+        <span class="chip">en metro<span class="sub">by subway</span></span>
+        <span class="chip">hacer transbordo<span class="sub">to transfer / change lines</span></span>
+        <span class="chip">hora pico<span class="sub">rush hour</span></span>
+        <span class="chip">todo recto<span class="sub">straight ahead</span></span>
+        <span class="chip">en la siguiente esquina<span class="sub">at the next corner</span></span>
+        <span class="chip">a dos cuadras<span class="sub">two blocks away</span></span>
+        <span class="chip">al lado de<span class="sub">next to</span></span>
+      </div>
+      <div class="note">Nota de práctica: para consolidar este tema, Komal puede describir su trayecto real al trabajo o a una cita usando al menos un medio de transporte, dos conectores y una indicación. <span class="sub">Practice note: Komal can consolidate the topic by describing her real route to work or an appointment using at least one means of transport, two connectors, and one direction.</span></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-vocab">
+    <div class="card">
+      <h2>Vocabulario <span class="sub">Vocabulary</span></h2>
+      <p style="font-size:.85rem;color:var(--gray)">Toca cada tarjeta para ver la traducción <span class="sub">Tap each card to see the translation</span></p>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <button class="filter-btn active-filter" id="filter-all" onclick="setFilter('all')">Todo<span class="sub" style="color:inherit">All</span></button>
+        <button class="filter-btn" id="filter-transport" onclick="setFilter('transport')">Transporte<span class="sub" style="color:inherit">Transport</span></button>
+        <button class="filter-btn" id="filter-directions" onclick="setFilter('directions')">Direcciones<span class="sub" style="color:inherit">Directions</span></button>
+      </div>
+      <div class="flash-grid" id="flashgrid"></div>
+    </div>
+
+    <div class="card">
+      <h2>Frases útiles en contexto <span class="sub">Useful phrases in context</span></h2>
+      <div class="roleplay-box">
+        <div class="role-line"><b>Llegar tarde:</b> “Voy a llegar unos minutos tarde; hay mucho tráfico.”<span class="sub">Running late: “I’m going to arrive a few minutes late; there is heavy traffic.”</span></div>
+        <div class="role-line"><b>Organizar una ruta:</b> “Tomo la línea 2 y hago transbordo en la estación Central.”<span class="sub">Planning a route: “I take line 2 and transfer at Central Station.”</span></div>
+        <div class="role-line"><b>Pedir una ubicación:</b> “Perdona, ¿sabes cómo llegar a la oficina de correos?”<span class="sub">Asking for a location: “Excuse me, do you know how to get to the post office?”</span></div>
+        <div class="role-line"><b>Confirmar:</b> “Entonces sigo todo recto y giro a la derecha, ¿verdad?”<span class="sub">Confirming: “So I go straight ahead and turn right, correct?”</span></div>
+        <div class="role-line"><b>Opción alternativa:</b> “¿Es más rápido ir en taxi o en metro?”<span class="sub">Alternative option: “Is it faster to go by taxi or by subway?”</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="view" id="view-roleplay">
+    <div class="card">
+      <h2>Roleplay 1: Llegar a una reunión presencial <span class="sub">Getting to an in-person meeting</span></h2>
+      <div class="roleplay-box">
+        <div class="role-line"><b>Komal:</b> “Hola, voy a la reunión en la oficina de la calle Mayor. ¿Cómo llego desde la estación?”<span class="sub">“Hi, I’m going to the meeting at the office on Calle Mayor. How do I get there from the station?”</span></div>
+        <div class="role-line"><b>Tú:</b> “Sal de la estación y sigue todo recto dos cuadras.”<span class="sub">“Leave the station and go straight ahead for two blocks.”</span></div>
+        <div class="role-line"><b>Tú:</b> “En el semáforo, gira a la izquierda. La oficina está enfrente del banco.”<span class="sub">“At the traffic light, turn left. The office is opposite the bank.”</span></div>
+        <div class="role-line"><b>Komal:</b> “Perfecto. ¿Está lejos?”<span class="sub">“Perfect. Is it far?”</span></div>
+        <div class="role-line"><b>Tú:</b> “No, está a unos cinco minutos a pie.”<span class="sub">“No, it is about five minutes away on foot.”</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Roleplay 2: Pedir indicaciones en la ciudad <span class="sub">Asking for directions in the city</span></h2>
+      <div class="roleplay-box">
+        <div class="role-line"><b>Komal:</b> “Disculpe, ¿cómo puedo llegar a la clínica?”<span class="sub">“Excuse me, how can I get to the clinic?”</span></div>
+        <div class="role-line"><b>Tú:</b> “Puede tomar el autobús 18. Bájese en la tercera parada.”<span class="sub">“You can take bus 18. Get off at the third stop.”</span></div>
+        <div class="role-line"><b>Komal:</b> “¿Tengo que hacer transbordo?”<span class="sub">“Do I need to transfer?”</span></div>
+        <div class="role-line"><b>Tú:</b> “No, es directo. Después cruce la avenida; la clínica queda al lado de una farmacia.”<span class="sub">“No, it is direct. Then cross the avenue; the clinic is next to a pharmacy.”</span></div>
+        <div class="role-line"><b>Komal:</b> “Muchas gracias. ¿Cuánto tarda el autobús?”<span class="sub">“Thank you very much. How long does the bus take?”</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Producción libre (cierre) <span class="sub">Free production (wrap-up)</span></h2>
+      <p style="font-size:.9rem">Pide a Komal que explique cómo llegar desde su casa a un lugar que visita con frecuencia: su trabajo, una cafetería, el gimnasio o una estación. Debe usar al menos cuatro palabras del vocabulario y dos indicaciones.<span class="sub" style="display:block;margin-top:6px">Ask Komal to explain how to get from her home to a place she visits often: her workplace, a coffee shop, the gym, or a station. She should use at least four vocabulary words and two directions.</span></p>
+    </div>
+  </div>
+
+  <div class="view" id="view-grammar">
+    <div class="card">
+      <span class="badge">GRAMMAR TIPS</span>
+      <h2>Tips de gramática: transporte y direcciones <span class="sub">Grammar tips: transport and directions</span></h2>
+      <div class="grammar-box">
+        <h3>1. ¿En qué transporte? Usa <em>en</em></h3>
+        <p>Usamos <strong>en</strong> con la mayoría de los medios de transporte: <em>Voy en metro</em>, <em>llego en taxi</em>, <em>viajamos en tren</em>. La excepción habitual es <strong>a pie</strong>: <em>La oficina está cerca; voy a pie.</em></p>
+        <span class="sub">Use <strong>en</strong> with most means of transport: <em>en metro, en taxi, en tren</em>. The usual exception is <strong>a pie</strong> (on foot).</span>
+      </div>
+      <div class="grammar-box">
+        <h3>2. Indicaciones: imperativo afirmativo</h3>
+        <p>Para indicar una ruta de manera informal, usa la forma de <strong>tú</strong>. Para una persona desconocida o una situación formal, usa <strong>usted</strong>.</p>
+        <table>
+          <tr><th>Infinitivo</th><th>Tú (informal)</th><th>Usted (formal)</th><th>Ejemplo</th></tr>
+          <tr><td>seguir</td><td><strong>sigue</strong></td><td><strong>siga</strong></td><td>Sigue todo recto.</td></tr>
+          <tr><td>girar</td><td><strong>gira</strong></td><td><strong>gire</strong></td><td>Gire a la derecha.</td></tr>
+          <tr><td>tomar</td><td><strong>toma</strong></td><td><strong>tome</strong></td><td>Toma la línea 1.</td></tr>
+          <tr><td>cruzar</td><td><strong>cruza</strong></td><td><strong>cruce</strong></td><td>Cruce la avenida.</td></tr>
+        </table>
+      </div>
+      <div class="grammar-box">
+        <h3>3. Ordena la ruta con conectores</h3>
+        <p>Las indicaciones son más claras si usamos conectores: <strong>primero</strong>, <strong>después</strong>, <strong>luego</strong> y <strong>al final</strong>.</p>
+        <p style="margin-top:8px"><em>Primero toma el metro. Después baja en la estación Museo. Luego cruza la plaza. Al final, gira a la izquierda.</em></p>
+        <span class="sub">Directions are clearer when you use sequence connectors: first, then, afterwards, and finally.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Ejercicio final: completa la ruta <span class="sub">Final exercise: complete the route</span></h2>
+      <p style="font-size:.9rem">Komal tiene una cita en una oficina. Completa las indicaciones con las palabras adecuadas: <strong>en / sigue / gira / toma / a pie</strong>.</p>
+      <div class="roleplay-box">
+        <p><strong>Ruta:</strong> “Primero, <input class="answer" id="a1" placeholder="Escribe una palabra"> el metro hasta la estación Norte. Después, <input class="answer" id="a2" placeholder="Escribe una palabra"> todo recto una cuadra y <input class="answer" id="a3" placeholder="Escribe una palabra"> a la derecha. La oficina está muy cerca: puedes ir <input class="answer" id="a4" placeholder="Escribe una palabra">.”</p>
+        <button class="check-btn" onclick="checkGrammar()">Revisar respuestas</button>
+        <div id="grammarFeedback" class="feedback"></div>
+      </div>
+      <div class="note">Respuestas: <strong>toma · sigue · gira · a pie</strong>. Observa que <em>toma, sigue</em> y <em>gira</em> son formas del imperativo para <em>tú</em>. <span class="sub">Answers: <strong>toma · sigue · gira · a pie</strong>. Notice that <em>toma, sigue</em>, and <em>gira</em> are the informal imperative forms.</span></div>
+      <button class="check-btn" onclick="markDone()">Marcar clase 3 como completada</button>
+    </div>
+  </div>
+
+  <div class="view" id="view-progress">
+    <div class="card">
+      <h2>Progreso del curso <span class="sub">Course progress</span></h2>
+      <p style="font-size:.85rem;color:var(--gray)">Clases completadas <span class="sub" style="display:inline">Classes completed</span> <span id="doneCount">0</span> / 24</p>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+  </div>
+</main>
+
+<footer>classes-ES-komal · Clase 3 · Transporte y direcciones</footer>
+
+<script>
+  const vocab = [
+    {es:'en metro', en:'by subway', cat:'transport'}, {es:'en autobús', en:'by bus', cat:'transport'}, {es:'en taxi', en:'by taxi', cat:'transport'}, {es:'en bicicleta', en:'by bicycle', cat:'transport'}, {es:'a pie', en:'on foot', cat:'transport'}, {es:'hacer transbordo', en:'to transfer / change lines', cat:'transport'}, {es:'hora pico', en:'rush hour', cat:'transport'}, {es:'tráfico', en:'traffic', cat:'transport'}, {es:'parada', en:'stop', cat:'transport'}, {es:'línea directa', en:'direct line', cat:'transport'},
+    {es:'todo recto', en:'straight ahead', cat:'directions'}, {es:'girar a la derecha', en:'turn right', cat:'directions'}, {es:'girar a la izquierda', en:'turn left', cat:'directions'}, {es:'en la siguiente esquina', en:'at the next corner', cat:'directions'}, {es:'en el semáforo', en:'at the traffic light', cat:'directions'}, {es:'al lado de', en:'next to', cat:'directions'}, {es:'enfrente de', en:'opposite / in front of', cat:'directions'}, {es:'a dos cuadras', en:'two blocks away', cat:'directions'}, {es:'cruzar la calle', en:'cross the street', cat:'directions'}, {es:'bajarse en', en:'get off at', cat:'directions'}
+  ];
+  let currentFilter = 'all';
+  function renderFlashcards() {
+    const grid = document.getElementById('flashgrid');
+    const filtered = currentFilter === 'all' ? vocab : vocab.filter(v => v.cat === currentFilter);
+    grid.innerHTML = filtered.map(v => `<div class="flashcard" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front">${v.es}</div><div class="fc-face fc-back">${v.en}</div></div></div>`).join('');
+  }
+  function setFilter(f) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+    document.getElementById('filter-' + f).classList.add('active-filter');
+    renderFlashcards();
+  }
+  function showView(name) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.nav-item[data-view="${name}"]`).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  function checkGrammar() {
+    const expected = ['toma','sigue','gira','a pie'];
+    const values = expected.map((_, i) => document.getElementById('a' + (i + 1)).value.trim().toLowerCase());
+    const correct = values.filter((v, i) => v === expected[i]).length;
+    const feedback = document.getElementById('grammarFeedback');
+    feedback.textContent = correct === 4 ? '¡Excelente! La ruta está completa y es gramaticalmente correcta.' : `Tienes ${correct}/4 respuestas correctas. Revisa el tip de imperativo y vuelve a intentarlo.`;
+  }
+  function loadProgress() { try { return JSON.parse(localStorage.getItem('komalProgress')) || {}; } catch(e) { return {}; } }
+  function saveProgress(p) { localStorage.setItem('komalProgress', JSON.stringify(p)); }
+  function markDone() { const p = loadProgress(); p[3] = true; saveProgress(p); updateStats(); alert('Clase 3 marcada como completada / Class 3 marked as completed'); }
+  function updateStats() { const p = loadProgress(); const count = Object.values(p).filter(Boolean).length; document.getElementById('doneCount').textContent = count; document.getElementById('progressFill').style.width = (count / 24 * 100) + '%'; }
+  renderFlashcards(); updateStats();
+</script>
+</body>
+</html>
