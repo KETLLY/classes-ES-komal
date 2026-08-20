@@ -3,16 +3,265 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Clases de español — Komal</title>
+  <meta name="description" content="Materiales de las clases de español de Komal.">
+  <title>Materiales de clase — Komal's Spanish Journey</title>
+  <style>
+    :root {
+      --pink: #F92B75;
+      --pink-light: #FDE7EE;
+      --blue: #2E5AAC;
+      --blue-light: #E8F0FE;
+      --ink: #1A1A1A;
+      --gray: #6B6B6B;
+      --bg: #F5F6F8;
+      --card: #FFFFFF;
+      --border: #E6E6E8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .page {
+      width: min(960px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 44px 0 56px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #FFB86B, var(--pink));
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .brand-name { display: block; font-weight: 800; font-size: 15px; }
+    .brand-sub { display: block; color: var(--gray); font-size: 12px; margin-top: 2px; }
+
+    .back-link {
+      padding: 10px 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--blue);
+      background: var(--card);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .back-link:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgba(26, 26, 26, .08); }
+
+    .hero {
+      background: linear-gradient(135deg, var(--pink), #FF72A3);
+      padding: 32px;
+      border-radius: 20px;
+      color: #fff;
+      margin-bottom: 26px;
+      box-shadow: 0 12px 28px rgba(249, 43, 117, .18);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+      opacity: .92;
+    }
+
+    h1 { margin: 0 0 10px; font-size: clamp(28px, 5vw, 38px); line-height: 1.12; }
+
+    .hero p { margin: 0; max-width: 620px; font-size: 15px; line-height: 1.55; opacity: .96; }
+
+    .section-title { margin: 0 0 8px; font-size: 20px; }
+    .section-sub { margin: 0 0 20px; color: var(--gray); font-size: 14px; }
+
+    .materials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .material-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 300px;
+      padding: 23px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      box-shadow: 0 5px 14px rgba(26, 26, 26, .035);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .material-card:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(26, 26, 26, .09); }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 21px;
+    }
+
+    .class-number { color: var(--pink); font-size: 30px; font-weight: 900; line-height: 1; }
+
+    .tag {
+      padding: 5px 9px;
+      border-radius: 20px;
+      background: var(--blue-light);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .material-card h2 { margin: 0 0 10px; font-size: 18px; line-height: 1.25; }
+    .material-card p { margin: 0; color: var(--gray); font-size: 13.5px; line-height: 1.55; }
+
+    .topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 17px 0 22px;
+    }
+
+    .topic {
+      padding: 5px 8px;
+      background: var(--pink-light);
+      border-radius: 8px;
+      color: #9A1248;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .open-button {
+      display: block;
+      margin-top: auto;
+      padding: 11px 13px;
+      border-radius: 10px;
+      background: var(--pink);
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      transition: background .18s ease, transform .18s ease;
+    }
+
+    .open-button:hover { background: #DF1C61; transform: translateY(-1px); }
+
+    .footer-note { margin: 30px 0 0; color: var(--gray); font-size: 12px; text-align: center; }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 28px, 520px); padding-top: 24px; }
+      .topbar { align-items: flex-start; }
+      .back-link { white-space: nowrap; }
+      .hero { padding: 25px 22px; }
+      .materials-grid { grid-template-columns: 1fr; }
+      .material-card { min-height: auto; }
+    }
+  </style>
 </head>
 <body>
-  <main>
-    <h1>Clases de español — Komal</h1>
-    <p>Materiales interactivos del curso.</p>
-    <ul>
-      <li><a href="clase2_komal_interactivo_v2.html">Clase 2: Rutina laboral y comunicación técnica</a></li>
-      <li><a href="clase3_komal_transporte_direcciones.html">Clase 3: Transporte y direcciones</a></li>
-    </ul>
+  <main class="page">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Volver al inicio de Komal's Spanish Journey">
+        <span class="avatar">KD</span>
+        <span>
+          <span class="brand-name">Komal D.</span>
+          <span class="brand-sub">A2 → B1 · Spanish Journey</span>
+        </span>
+      </a>
+      <a class="back-link" href="index.html">← Volver al inicio</a>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">Spanish Journey</p>
+      <h1 id="page-title">📚 Materiales de clase</h1>
+      <p>Accede a las sesiones interactivas y repasa el vocabulario, la gramática y los roleplays trabajados en cada encuentro.</p>
+    </section>
+
+    <section aria-labelledby="sessions-title">
+      <h2 class="section-title" id="sessions-title">Sesiones disponibles</h2>
+      <p class="section-sub">Elige una clase para abrir su material interactivo.</p>
+
+      <div class="materials-grid">
+        <article class="material-card">
+          <div class="card-top">
+            <span class="class-number">02</span>
+            <span class="tag">Trabajo</span>
+          </div>
+          <h2>Rutina laboral y comunicación técnica</h2>
+          <p>Describe tu trabajo, participa en un standup y practica cómo reportar un problema o pedir ayuda técnica.</p>
+          <div class="topics">
+            <span class="topic">Vocabulario IT</span>
+            <span class="topic">Presente</span>
+            <span class="topic">Roleplays</span>
+          </div>
+          <a class="open-button" href="clase2_komal_interactivo_v2.html">Abrir clase 2 →</a>
+        </article>
+
+        <article class="material-card">
+          <div class="card-top">
+            <span class="class-number">03</span>
+            <span class="tag">Ciudad</span>
+          </div>
+          <h2>Transporte y direcciones</h2>
+          <p>Aprende a moverte por Bogotá, preguntar cómo llegar a un lugar y dar indicaciones claras.</p>
+          <div class="topics">
+            <span class="topic">Transporte</span>
+            <span class="topic">Imperativo</span>
+            <span class="topic">Ubicación</span>
+          </div>
+          <a class="open-button" href="clase3_komal_transporte_direcciones.html">Abrir clase 3 →</a>
+        </article>
+
+        <article class="material-card">
+          <div class="card-top">
+            <span class="class-number">04</span>
+            <span class="tag">Bogotá</span>
+          </div>
+          <h2>Un día en Bogotá</h2>
+          <p>Integra lugares, rutinas, transporte y expresiones útiles para narrar una experiencia cotidiana en la ciudad.</p>
+          <div class="topics">
+            <span class="topic">Lugares</span>
+            <span class="topic">Rutina</span>
+            <span class="topic">Conversación</span>
+          </div>
+          <a class="open-button" href="clase4_komal_un_dia_en_bogota_diseno_clase3.html">Abrir clase 4 →</a>
+        </article>
+      </div>
+    </section>
+
+    <p class="footer-note">Komal's Spanish Journey · Materiales de práctica A2 → B1</p>
   </main>
 </body>
 </html>
