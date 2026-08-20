@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Komal — Clase 4: Un día en Bogotá</title>
+  <style>
+    :root { --pink:#F92B75; --pink-light:#FDE7EE; --dark:#1a1a2e; --gray:#666; --bg:#faf9fb; --card-bg:#fff; --border:#e8e4ec; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--dark); padding:0; }
+    header { background:linear-gradient(135deg,var(--pink),#ff6b9d); color:#fff; padding:24px 20px; text-align:center; }
+    header h1 { font-size:1.4rem; margin-bottom:4px; }
+    header p { opacity:.9; font-size:.9rem; }
+    nav { display:flex; overflow-x:auto; background:#fff; border-bottom:2px solid var(--border); position:sticky; top:0; z-index:10; }
+    .nav-item { flex:1; padding:14px 8px; text-align:center; cursor:pointer; font-size:.85rem; font-weight:600; color:var(--gray); border-bottom:3px solid transparent; white-space:nowrap; min-width:112px; }
+    .nav-item.active { color:var(--pink); border-bottom-color:var(--pink); }
+    main { max-width:800px; margin:0 auto; padding:20px 16px 60px; }
+    .view { display:none; }
+    .view.active { display:block; }
+    .card { background:var(--card-bg); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .card h2 { font-size:1.05rem; margin-bottom:8px; color:var(--pink); }
+    .sub { font-size:.75rem; color:var(--gray); font-style:italic; display:block; margin-top:2px; }
+    .badge { display:inline-block; background:var(--pink-light); color:var(--pink); font-size:.75rem; font-weight:700; padding:3px 10px; border-radius:20px; margin-bottom:8px; }
+    .outcome { background:var(--pink-light); border-left:4px solid var(--pink); padding:14px; border-radius:8px; font-size:.95rem; line-height:1.5; }
+    .outcome .sub { margin-top:8px; font-size:.8rem; }
+    .timer-block { display:flex; justify-content:space-between; align-items:center; background:var(--pink-light); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:.85rem; }
+    .timer-block .txt { display:flex; flex-direction:column; }
+    .timer-block .min { font-weight:700; color:var(--pink); white-space:nowrap; padding-left:10px; }
+    .chip-wrap { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+    .chip { display:inline-flex; flex-direction:column; background:var(--pink-light); color:var(--pink); font-size:.78rem; padding:5px 10px; border-radius:14px; line-height:1.3; }
+    .chip .sub { color:var(--gray); font-size:.68rem; }
+    .flash-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+    @media(max-width:520px) { .flash-grid { grid-template-columns:1fr; } }
+    .flashcard { background:var(--card-bg); border:2px solid var(--border); border-radius:12px; height:110px; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px; cursor:pointer; perspective:600px; position:relative; transition:.2s; }
+    .flashcard:hover { border-color:var(--pink); }
+    .fc-inner { width:100%; transition:transform .5s; transform-style:preserve-3d; position:relative; }
+    .flashcard.flipped .fc-inner { transform:rotateY(180deg); }
+    .fc-face { position:absolute; width:100%; backface-visibility:hidden; font-size:.95rem; font-weight:600; padding:4px; }
+    .fc-front { color:var(--dark); }
+    .fc-back { transform:rotateY(180deg); color:var(--pink); font-weight:700; }
+    .filter-btn { background:#fff; border:2px solid var(--border); color:var(--gray); font-size:.8rem; padding:6px 12px; border-radius:16px; cursor:pointer; font-weight:600; display:flex; flex-direction:column; align-items:center; line-height:1.3; }
+    .filter-btn.active-filter { background:var(--pink); color:#fff; border-color:var(--pink); }
+    .roleplay-box { background:#fff; border:2px dashed var(--pink); border-radius:10px; padding:14px; margin-top:10px; }
+    .role-line { margin:8px 0; font-size:.9rem; line-height:1.35; }
+    .role-line b { color:var(--pink); }
+    .note { background:#FFF8E1; border-left:4px solid #F5A623; padding:12px; border-radius:8px; font-size:.85rem; margin-top:14px; line-height:1.45; }
+    .grammar-box { background:#F5F0FF; border-left:4px solid #7C3AED; padding:14px; border-radius:8px; font-size:.88rem; margin-top:10px; line-height:1.5; }
+    .grammar-box h3 { color:#7C3AED; font-size:.96rem; margin-bottom:8px; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; font-size:.82rem; }
+    th,td { padding:8px 6px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top; }
+    th { color:var(--gray); font-weight:600; font-size:.76rem; }
+    .check-btn { background:var(--pink); color:#fff; border:none; padding:8px 14px; border-radius:20px; font-size:.8rem; cursor:pointer; margin-top:10px; font-weight:600; }
+    .check-btn:hover { opacity:.9; }
+    .answer { width:100%; border:1px solid var(--border); border-radius:8px; padding:9px; margin-top:8px; font-family:inherit; font-size:.88rem; }
+    .inline-answer { display:inline-block; width:125px; margin:0 3px; vertical-align:middle; }
+    .feedback { margin-top:8px; min-height:20px; color:var(--pink); font-size:.85rem; font-weight:600; }
+    .progress-bar { background:var(--border); height:8px; border-radius:6px; overflow:hidden; margin-top:6px; }
+    .progress-fill { background:var(--pink); height:100%; transition:width .3s; }
+    footer { text-align:center; padding:16px; color:var(--gray); font-size:.75rem; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Clase 4 · Un día en Bogotá</h1>
+  <p>Komal · A2 → B1 · Sesión interactiva de 50 min<span style="display:block;font-size:.8rem;opacity:.85">Interactive 50-min session</span></p>
+</header>
+
+<nav>
+  <div class="nav-item active" data-view="plan" onclick="showView('plan')">Plan de clase<span class="sub">Lesson plan</span></div>
+  <div class="nav-item" data-view="vocab" onclick="showView('vocab')">Flashcards</div>
+  <div class="nav-item" data-view="roleplay" onclick="showView('roleplay')">Roleplays</div>
+  <div class="nav-item" data-view="grammar" onclick="showView('grammar')">Tips de gramática<span class="sub">Grammar tips</span></div>
+  <div class="nav-item" data-view="progress" onclick="showView('progress')">Mi progreso<span class="sub">My progress</span></div>
+</nav>
+
+<main>
+  <div class="view active" id="view-plan">
+    <div class="card">
+      <span class="badge">LEARNING OUTCOME</span>
+      <div class="outcome">
+        Al terminar esta clase, Komal podrá proponer, negociar y ajustar un itinerario sencillo en Bogotá usando futuro próximo, conectores y expresiones de preferencia.
+        <span class="sub">By the end of this class, Komal will be able to propose, negotiate, and adjust a simple itinerary in Bogotá using the near future, connectors, and preference expressions.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Estructura de 50 minutos <span class="sub">50-minute structure</span></h2>
+      <div class="timer-block"><div class="txt">Conversación inicial: “¿Cómo sería tu día ideal en Bogotá?”<span class="sub">Warm-up: “What would your ideal day in Bogotá be like?”</span></div><span class="min">8 min</span></div>
+      <div class="timer-block"><div class="txt">Foco lingüístico: planes, propuestas y preferencias<span class="sub">Language focus: plans, proposals, and preferences</span></div><span class="min">10 min</span></div>
+      <div class="timer-block"><div class="txt">Frases para organizar horarios y cambiar de plan<span class="sub">Phrases to organize schedules and change plans</span></div><span class="min">12 min</span></div>
+      <div class="timer-block"><div class="txt">Roleplay 1: Planear una salida con un colega<span class="sub">Roleplay 1: Planning an outing with a colleague</span></div><span class="min">6 min</span></div>
+      <div class="timer-block"><div class="txt">Roleplay 2: Ajustar el plan ante un imprevisto<span class="sub">Roleplay 2: Adjusting the plan after an unexpected problem</span></div><span class="min">6 min</span></div>
+      <div class="timer-block"><div class="txt">Producción libre: mi día ideal + cierre<span class="sub">Free production: my ideal day + wrap-up</span></div><span class="min">8 min</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Foco lingüístico <span class="sub">Language focus</span></h2>
+      <p style="font-size:.9rem;line-height:1.5">Usa <strong>ir a + infinitivo</strong> para planes próximos, <strong>podemos / podríamos + infinitivo</strong> para proponer alternativas y <strong>me gustaría + infinitivo</strong> para expresar preferencias.<span class="sub" style="display:block;margin-top:6px">Use <strong>ir a + infinitive</strong> for near-future plans, <strong>podemos / podríamos + infinitive</strong> to make proposals, and <strong>me gustaría + infinitive</strong> to express preferences.</span></p>
+      <div class="chip-wrap">
+        <span class="chip">voy a reservar<span class="sub">I’m going to reserve</span></span>
+        <span class="chip">podemos ir<span class="sub">we can go</span></span>
+        <span class="chip">podríamos cambiar<span class="sub">we could change</span></span>
+        <span class="chip">me gustaría probar<span class="sub">I’d like to try</span></span>
+        <span class="chip">primero / luego<span class="sub">first / then</span></span>
+        <span class="chip">después / al final<span class="sub">afterwards / finally</span></span>
+        <span class="chip">porque / pero / como<span class="sub">because / but / since</span></span>
+      </div>
+      <div class="note">Nota de práctica: Komal puede diseñar un plan realista con cuatro momentos del día. Debe usar al menos dos propuestas, una preferencia y dos justificaciones. <span class="sub">Practice note: Komal can design a realistic plan with four moments of the day. She should use at least two proposals, one preference, and two justifications.</span></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-vocab">
+    <div class="card">
+      <h2>Vocabulario <span class="sub">Vocabulary</span></h2>
+      <p style="font-size:.85rem;color:var(--gray)">Toca cada tarjeta para ver la traducción <span class="sub">Tap each card to see the translation</span></p>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <button class="filter-btn active-filter" id="filter-all" onclick="setFilter('all')">Todo<span class="sub" style="color:inherit">All</span></button>
+        <button class="filter-btn" id="filter-planning" onclick="setFilter('planning')">Planificación<span class="sub" style="color:inherit">Planning</span></button>
+        <button class="filter-btn" id="filter-places" onclick="setFilter('places')">Lugares y planes<span class="sub" style="color:inherit">Places & plans</span></button>
+      </div>
+      <div class="flash-grid" id="flashgrid"></div>
+    </div>
+
+    <div class="card">
+      <h2>Frases útiles en contexto <span class="sub">Useful phrases in context</span></h2>
+      <div class="roleplay-box">
+        <div class="role-line"><b>Proponer:</b> “¿Qué te parece si vamos a La Candelaria primero?”<span class="sub">Making a proposal: “What do you think if we go to La Candelaria first?”</span></div>
+        <div class="role-line"><b>Aceptar:</b> “Me parece buena idea. Podemos salir temprano.”<span class="sub">Accepting: “That sounds like a good idea. We can leave early.”</span></div>
+        <div class="role-line"><b>Expresar preferencia:</b> “Me gustaría visitar un museo porque quiero conocer más sobre la historia de Colombia.”<span class="sub">Expressing a preference: “I’d like to visit a museum because I want to learn more about Colombia’s history.”</span></div>
+        <div class="role-line"><b>Organizar horarios:</b> “Primero desayunamos; luego vamos al museo y después almorzamos.”<span class="sub">Organizing the schedule: “First we have breakfast; then we go to the museum and afterwards have lunch.”</span></div>
+        <div class="role-line"><b>Cambiar el plan:</b> “Hay mucho tráfico, así que podríamos elegir un lugar más cerca.”<span class="sub">Changing the plan: “There is a lot of traffic, so we could choose somewhere closer.”</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="view" id="view-roleplay">
+    <div class="card">
+      <h2>Roleplay 1: Planear una salida con un colega <span class="sub">Planning an outing with a colleague</span></h2>
+      <div class="roleplay-box">
+        <div class="role-line"><b>Situación:</b> Tu colega tiene un día libre en Bogotá. Quiere conocer lugares históricos y probar comida colombiana.<span class="sub">Situation: Your colleague has a free day in Bogotá. They want to see historic places and try Colombian food.</span></div>
+        <div class="role-line"><b>Colega:</b> “Tengo un día libre el sábado. Me gustaría conocer una zona histórica y probar comida colombiana.”<span class="sub">“I have a free day on Saturday. I’d like to visit a historic area and try Colombian food.”</span></div>
+        <div class="role-line"><b>Komal:</b> “¡Perfecto! Podemos ir a La Candelaria primero. ¿A qué hora te gustaría empezar?”<span class="sub">“Perfect! We can go to La Candelaria first. What time would you like to start?”</span></div>
+        <div class="role-line"><b>Colega:</b> “Preferiría salir temprano para aprovechar el día.”<span class="sub">“I’d prefer to leave early to make the most of the day.”</span></div>
+        <div class="role-line"><b>Komal:</b> “Entonces, podemos quedar a las nueve. Luego vamos a un museo y después almorzamos comida típica.”<span class="sub">“Then, we can meet at nine. Afterwards we go to a museum and then have traditional food for lunch.”</span></div>
+      </div>
+      <div class="note">Tu reto: añade una propuesta de transporte y una actividad final para la tarde. <span class="sub">Your challenge: add a transport proposal and a final afternoon activity.</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Roleplay 2: Cambiar el plan <span class="sub">Changing the plan</span></h2>
+      <div class="roleplay-box">
+        <div class="role-line"><b>Situación:</b> El museo está cerrado por una actividad privada y empieza a llover.<span class="sub">Situation: The museum is closed for a private event and it starts to rain.</span></div>
+        <div class="role-line"><b>Komal:</b> “El museo está cerrado, así que podríamos ir a una galería o a una cafetería cerca.”<span class="sub">“The museum is closed, so we could go to a gallery or a nearby coffee shop.”</span></div>
+        <div class="role-line"><b>Komal:</b> “Es mejor porque está lloviendo. Voy a buscar una opción y reservar una mesa.”<span class="sub">“It’s better because it’s raining. I’m going to look for an option and reserve a table.”</span></div>
+      </div>
+      <div class="note">Estructura útil: <strong>problema + alternativa + razón + siguiente acción</strong>. Puedes cambiar el problema: tráfico, lluvia, reserva cancelada o poco tiempo. <span class="sub">Useful structure: <strong>problem + alternative + reason + next action</strong>. You can change the problem: traffic, rain, a cancelled booking, or limited time.</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Producción libre (cierre) <span class="sub">Free production (wrap-up)</span></h2>
+      <p style="font-size:.9rem">Pide a Komal que presente su día ideal en Bogotá en 1–2 minutos. Debe incluir la mañana, el mediodía, la tarde y el final del día; usar <strong>primero, luego, después, al final</strong>; y justificar dos decisiones con <strong>porque, como</strong> o <strong>pero</strong>.<span class="sub" style="display:block;margin-top:6px">Ask Komal to present her ideal day in Bogotá in 1–2 minutes. She should include morning, midday, afternoon, and the end of the day; use <strong>primero, luego, después, al final</strong>; and justify two decisions with <strong>porque, como</strong>, or <strong>pero</strong>.</span></p>
+    </div>
+  </div>
+
+  <div class="view" id="view-grammar">
+    <div class="card">
+      <span class="badge">GRAMMAR TIPS</span>
+      <h2>Tips de gramática: planes y preferencias <span class="sub">Grammar tips: plans and preferences</span></h2>
+      <div class="grammar-box">
+        <h3>1. Futuro próximo: <em>ir a + infinitivo</em></h3>
+        <p>Usamos <strong>ir a + infinitivo</strong> para hablar de una acción próxima o planificada: <em>Voy a reservar una mesa</em>, <em>vamos a visitar un museo</em>, <em>van a salir temprano</em>.</p>
+        <span class="sub">Use <strong>ir a + infinitive</strong> for a near-future or planned action: <em>Voy a reservar una mesa</em> (I’m going to reserve a table).</span>
+      </div>
+      <div class="grammar-box">
+        <h3>2. Propuestas: <em>podemos</em> y <em>podríamos</em></h3>
+        <p><strong>Podemos + infinitivo</strong> es una propuesta directa: <em>Podemos ir al museo</em>. <strong>Podríamos + infinitivo</strong> es una propuesta más suave o una alternativa: <em>Podríamos cambiar de plan</em>.</p>
+        <span class="sub"><strong>Podemos</strong> makes a direct proposal; <strong>podríamos</strong> makes a softer proposal or suggests an alternative.</span>
+      </div>
+      <div class="grammar-box">
+        <h3>3. Preferencias y conectores</h3>
+        <p>Usa <strong>me gustaría + infinitivo</strong> para expresar lo que quieres hacer: <em>Me gustaría probar comida típica</em>. Ordena tu itinerario con <strong>primero, luego, después</strong> y <strong>al final</strong>.</p>
+        <p style="margin-top:8px"><em>Primero vamos a desayunar. Luego visitamos el museo. Después almorzamos y, al final, tomamos un café.</em></p>
+        <span class="sub">Use <strong>me gustaría + infinitive</strong> for preferences. Organize an itinerary with <strong>first, then, afterwards, finally</strong>.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Ejercicio final: completa el itinerario <span class="sub">Final exercise: complete the itinerary</span></h2>
+      <p style="font-size:.9rem">Completa con las palabras adecuadas: <strong>voy a / podemos / gustaría / porque / luego</strong>.</p>
+      <div class="roleplay-box">
+        <p>“Primero, <input class="answer inline-answer" id="a1" placeholder="Escribe aquí"> reservar una mesa para almorzar. Después, <input class="answer inline-answer" id="a2" placeholder="Escribe aquí"> visitar una galería. Me <input class="answer inline-answer" id="a3" placeholder="Escribe aquí"> probar ajiaco <input class="answer inline-answer" id="a4" placeholder="Escribe aquí"> es un plato típico. <input class="answer inline-answer" id="a5" placeholder="Escribe aquí"> podemos tomar un café en una zona tranquila.”</p>
+        <button class="check-btn" onclick="checkGrammar()">Revisar respuestas</button>
+        <div id="grammarFeedback" class="feedback"></div>
+      </div>
+      <div class="note">Respuestas: <strong>voy a · podemos · gustaría · porque · luego</strong>. Recuerda: después de <em>voy a</em>, <em>podemos</em> y <em>me gustaría</em>, usamos un infinitivo. <span class="sub">Answers: <strong>voy a · podemos · gustaría · porque · luego</strong>. Remember: after <em>voy a</em>, <em>podemos</em>, and <em>me gustaría</em>, use an infinitive.</span></div>
+      <button class="check-btn" onclick="markDone()">Marcar clase 4 como completada</button>
+    </div>
+  </div>
+
+  <div class="view" id="view-progress">
+    <div class="card">
+      <h2>Progreso del curso <span class="sub">Course progress</span></h2>
+      <p style="font-size:.85rem;color:var(--gray)">Clases completadas <span class="sub" style="display:inline">Classes completed</span> <span id="doneCount">0</span> / 24</p>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+  </div>
+</main>
+
+<footer>classes-ES-komal · Clase 4 · Un día en Bogotá</footer>
+
+<script>
+  const vocab = [
+    {es:'quedar', en:'to arrange / meet', cat:'planning'}, {es:'reservar', en:'to reserve', cat:'planning'}, {es:'aprovechar', en:'to make the most of', cat:'planning'}, {es:'hora pico', en:'rush hour', cat:'planning'}, {es:'itinerario', en:'itinerary', cat:'planning'}, {es:'cambiar de plan', en:'to change plans', cat:'planning'}, {es:'proponer', en:'to suggest / propose', cat:'planning'}, {es:'cancelar una reserva', en:'to cancel a reservation', cat:'planning'},
+    {es:'lugar tranquilo', en:'quiet place', cat:'places'}, {es:'comida típica', en:'traditional food', cat:'places'}, {es:'zona histórica', en:'historic area', cat:'places'}, {es:'museo', en:'museum', cat:'places'}, {es:'galería', en:'gallery', cat:'places'}, {es:'cafetería', en:'coffee shop', cat:'places'}, {es:'tráfico', en:'traffic', cat:'places'}, {es:'lluvia', en:'rain', cat:'places'}
+  ];
+  let currentFilter = 'all';
+  function renderFlashcards() {
+    const grid = document.getElementById('flashgrid');
+    const filtered = currentFilter === 'all' ? vocab : vocab.filter(v => v.cat === currentFilter);
+    grid.innerHTML = filtered.map(v => `<div class="flashcard" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front">${v.es}</div><div class="fc-face fc-back">${v.en}</div></div></div>`).join('');
+  }
+  function setFilter(f) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+    document.getElementById('filter-' + f).classList.add('active-filter');
+    renderFlashcards();
+  }
+  function showView(name) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.nav-item[data-view="${name}"]`).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  function checkGrammar() {
+    const expected = ['voy a','podemos','gustaría','porque','luego'];
+    const values = expected.map((_, i) => document.getElementById('a' + (i + 1)).value.trim().toLowerCase());
+    const correct = values.filter((v, i) => v === expected[i]).length;
+    const feedback = document.getElementById('grammarFeedback');
+    feedback.textContent = correct === 5 ? '¡Excelente! El itinerario está completo y es gramaticalmente correcto.' : `Tienes ${correct}/5 respuestas correctas. Revisa los tips de planes, propuestas y preferencias.`;
+  }
+  function loadProgress() { try { return JSON.parse(localStorage.getItem('komalProgress')) || {}; } catch(e) { return {}; } }
+  function saveProgress(p) { localStorage.setItem('komalProgress', JSON.stringify(p)); }
+  function markDone() { const p = loadProgress(); p[4] = true; saveProgress(p); updateStats(); alert('Clase 4 marcada como completada / Class 4 marked as completed'); }
+  function updateStats() { const p = loadProgress(); const count = Object.values(p).filter(Boolean).length; document.getElementById('doneCount').textContent = count; document.getElementById('progressFill').style.width = (count / 24 * 100) + '%'; }
+  renderFlashcards(); updateStats();
+</script>
+</body>
+</html>
