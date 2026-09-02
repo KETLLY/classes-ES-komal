@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Komal — Clase 5: Estoy aprendiendo pádel</title>
+  <style>
+    :root { --pink:#F92B75; --pink-light:#FDE7EE; --dark:#1a1a2e; --gray:#666; --bg:#faf9fb; --card-bg:#fff; --border:#e8e4ec; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--dark); padding:0; }
+    header { background:linear-gradient(135deg,var(--pink),#ff6b9d); color:#fff; padding:24px 20px; text-align:center; }
+    header h1 { font-size:1.4rem; margin-bottom:4px; }
+    header p { opacity:.9; font-size:.9rem; }
+    nav { display:flex; overflow-x:auto; background:#fff; border-bottom:2px solid var(--border); position:sticky; top:0; z-index:10; }
+    .nav-item { flex:1; padding:14px 8px; text-align:center; cursor:pointer; font-size:.85rem; font-weight:600; color:var(--gray); border-bottom:3px solid transparent; white-space:nowrap; min-width:112px; }
+    .nav-item.active { color:var(--pink); border-bottom-color:var(--pink); }
+    main { max-width:800px; margin:0 auto; padding:20px 16px 60px; }
+    .view { display:none; }
+    .view.active { display:block; }
+    .card { background:var(--card-bg); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .card h2 { font-size:1.05rem; margin-bottom:8px; color:var(--pink); }
+    .sub { font-size:.75rem; color:var(--gray); font-style:italic; display:block; margin-top:2px; }
+    .badge { display:inline-block; background:var(--pink-light); color:var(--pink); font-size:.75rem; font-weight:700; padding:3px 10px; border-radius:20px; margin-bottom:8px; }
+    .outcome { background:var(--pink-light); border-left:4px solid var(--pink); padding:14px; border-radius:8px; font-size:.95rem; line-height:1.5; }
+    .outcome .sub { margin-top:8px; font-size:.8rem; }
+    .timer-block { display:flex; justify-content:space-between; align-items:center; background:var(--pink-light); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:.85rem; }
+    .timer-block .txt { display:flex; flex-direction:column; }
+    .timer-block .min { font-weight:700; color:var(--pink); white-space:nowrap; padding-left:10px; }
+    .chip-wrap { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+    .chip { display:inline-flex; flex-direction:column; background:var(--pink-light); color:var(--pink); font-size:.78rem; padding:5px 10px; border-radius:14px; line-height:1.3; }
+    .chip .sub { color:var(--gray); font-size:.68rem; }
+    .flash-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+    @media(max-width:520px) { .flash-grid { grid-template-columns:1fr; } }
+    .flashcard { background:var(--card-bg); border:2px solid var(--border); border-radius:12px; height:110px; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px; cursor:pointer; perspective:600px; position:relative; transition:.2s; }
+    .flashcard:hover { border-color:var(--pink); }
+    .fc-inner { width:100%; transition:transform .5s; transform-style:preserve-3d; position:relative; }
+    .flashcard.flipped .fc-inner { transform:rotateY(180deg); }
+    .fc-face { position:absolute; width:100%; backface-visibility:hidden; font-size:.95rem; font-weight:600; padding:4px; }
+    .fc-front { color:var(--dark); }
+    .fc-back { transform:rotateY(180deg); color:var(--pink); font-weight:700; }
+    .filter-btn { background:#fff; border:2px solid var(--border); color:var(--gray); font-size:.8rem; padding:6px 12px; border-radius:16px; cursor:pointer; font-weight:600; display:flex; flex-direction:column; align-items:center; line-height:1.3; }
+    .filter-btn.active-filter { background:var(--pink); color:#fff; border-color:var(--pink); }
+    .roleplay-box { background:#fff; border:2px dashed var(--pink); border-radius:10px; padding:14px; margin-top:10px; }
+    .role-line { margin:8px 0; font-size:.9rem; line-height:1.35; }
+    .role-line b { color:var(--pink); }
+    .note { background:#FFF8E1; border-left:4px solid #F5A623; padding:12px; border-radius:8px; font-size:.85rem; margin-top:14px; line-height:1.45; }
+    .grammar-box { background:#F5F0FF; border-left:4px solid #7C3AED; padding:14px; border-radius:8px; font-size:.88rem; margin-top:10px; line-height:1.5; }
+    .grammar-box h3 { color:#7C3AED; font-size:.96rem; margin-bottom:8px; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; font-size:.82rem; }
+    th,td { padding:8px 6px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top; }
+    th { color:var(--gray); font-weight:600; font-size:.76rem; }
+    .check-btn { background:var(--pink); color:#fff; border:none; padding:8px 14px; border-radius:20px; font-size:.8rem; cursor:pointer; margin-top:10px; font-weight:600; }
+    .check-btn:hover { opacity:.9; }
+    .answer { width:100%; border:1px solid var(--border); border-radius:8px; padding:9px; margin-top:8px; font-family:inherit; font-size:.88rem; }
+    .inline-answer { display:inline-block; width:125px; margin:0 3px; vertical-align:middle; }
+    .feedback { margin-top:8px; min-height:20px; color:var(--pink); font-size:.85rem; font-weight:600; }
+    .progress-bar { background:var(--border); height:8px; border-radius:6px; overflow:hidden; margin-top:6px; }
+    .progress-fill { background:var(--pink); height:100%; transition:width .3s; }
+    .quiz-option { display:block; width:100%; text-align:left; background:#fff; border:1px solid var(--border); border-radius:8px; padding:10px; margin-top:7px; font-family:inherit; font-size:.86rem; cursor:pointer; }
+    .quiz-option:hover { border-color:var(--pink); background:var(--pink-light); }
+    .quiz-option.correct { background:#E8F8EE; border-color:#34A853; color:#176b32; }
+    .quiz-option.wrong { background:#FFF0F0; border-color:#E05252; color:#9c2525; }
+    .profile-box { background:var(--pink-light); border-radius:10px; padding:14px; margin-top:10px; line-height:1.65; font-size:.9rem; }
+    footer { text-align:center; padding:16px; color:var(--gray); font-size:.75rem; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Clase 5 · Estoy aprendiendo pádel</h1>
+  <p>Komal · A2 → B1 · Sesión interactiva de 50 min<span style="display:block;font-size:.8rem;opacity:.85">Interactive 50-minute session</span></p>
+</header>
+
+<nav>
+  <div class="nav-item active" data-view="plan" onclick="showView('plan')">Plan de clase<span class="sub">Lesson plan</span></div>
+  <div class="nav-item" data-view="vocab" onclick="showView('vocab')">Flashcards</div>
+  <div class="nav-item" data-view="roleplay" onclick="showView('roleplay')">Roleplays</div>
+  <div class="nav-item" data-view="grammar" onclick="showView('grammar')">Tips de gramática<span class="sub">Grammar tips</span></div>
+  <div class="nav-item" data-view="progress" onclick="showView('progress')">Mi progreso<span class="sub">My progress</span></div>
+</nav>
+
+<main>
+  <div class="view active" id="view-plan">
+    <div class="card">
+      <span class="badge">LEARNING OUTCOME</span>
+      <div class="outcome">
+        Al terminar esta clase, Komal podrá hablar sobre su experiencia aprendiendo pádel, describir su rutina, expresar lo que le gusta y lo que le cuesta, y compartir una meta personal.
+        <span class="sub">By the end of this class, Komal will be able to talk about learning padel, describe his routine, express likes and difficulties, and share a personal goal.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Estructura de 50 minutos <span class="sub">50-minute structure</span></h2>
+      <div class="timer-block"><div class="txt">Conversación inicial: “¿Qué deporte practicas?”<span class="sub">Warm-up: “What sport do you practice?”</span></div><span class="min">8 min</span></div>
+      <div class="timer-block"><div class="txt">Vocabulario: objetos, personas y acciones en pádel<span class="sub">Vocabulary: padel equipment, people, and actions</span></div><span class="min">10 min</span></div>
+      <div class="timer-block"><div class="txt">Foco lingüístico: rutinas, gustos y dificultades<span class="sub">Language focus: routines, likes, and difficulties</span></div><span class="min">10 min</span></div>
+      <div class="timer-block"><div class="txt">Roleplay 1: Hablar con una persona curiosa sobre el pádel<span class="sub">Roleplay 1: Talking to someone curious about padel</span></div><span class="min">7 min</span></div>
+      <div class="timer-block"><div class="txt">Roleplay 2: Contar el último partido<span class="sub">Roleplay 2: Talking about the last match</span></div><span class="min">7 min</span></div>
+      <div class="timer-block"><div class="txt">Producción libre: mi perfil de jugador + cierre<span class="sub">Free production: my player profile + wrap-up</span></div><span class="min">8 min</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Foco lingüístico <span class="sub">Language focus</span></h2>
+      <p style="font-size:.9rem;line-height:1.5">Usa <strong>estar + gerundio</strong> para hablar de un proceso actual: <em>Estoy aprendiendo a jugar pádel</em>. Usa <strong>jugar / practicar</strong> para la rutina, <strong>me gusta / me cuesta</strong> para opiniones y dificultades, y <strong>quiero + infinitivo</strong> para metas.<span class="sub" style="display:block;margin-top:6px">Use <strong>estar + gerund</strong> for an ongoing process, <strong>jugar / practicar</strong> for routines, <strong>me gusta / me cuesta</strong> for opinions and difficulties, and <strong>quiero + infinitive</strong> for goals.</span></p>
+      <div class="chip-wrap">
+        <span class="chip">estoy aprendiendo<span class="sub">I am learning</span></span>
+        <span class="chip">juego pádel<span class="sub">I play padel</span></span>
+        <span class="chip">practico dos veces<span class="sub">I practice twice</span></span>
+        <span class="chip">me gusta porque…<span class="sub">I like it because…</span></span>
+        <span class="chip">me cuesta…<span class="sub">I find it difficult to…</span></span>
+        <span class="chip">quiero mejorar…<span class="sub">I want to improve…</span></span>
+      </div>
+      <div class="note">Nota de práctica: Komal puede crear una presentación breve de 5–6 frases. Debe incluir una rutina, un gusto, una dificultad y una meta. <span class="sub">Practice note: Komal can create a short 5–6 sentence presentation. It should include a routine, a like, a difficulty, and a goal.</span></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-vocab">
+    <div class="card">
+      <h2>Vocabulario de pádel <span class="sub">Padel vocabulary</span></h2>
+      <p style="font-size:.85rem;color:var(--gray)">Haz clic en una tarjeta para ver la traducción. <span class="sub">Click a card to see the translation.</span></p>
+      <div class="chip-wrap" style="margin-top:14px">
+        <button class="filter-btn active-filter" onclick="filterCards('all',this)">Todo<span class="sub">All</span></button>
+        <button class="filter-btn" onclick="filterCards('objects',this)">Objetos<span class="sub">Objects</span></button>
+        <button class="filter-btn" onclick="filterCards('actions',this)">Acciones<span class="sub">Actions</span></button>
+        <button class="filter-btn" onclick="filterCards('experience',this)">Experiencia<span class="sub">Experience</span></button>
+      </div>
+      <div class="flash-grid" id="flashGrid">
+        <div class="flashcard" data-cat="objects" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">la pala</div><div class="fc-face fc-back">padel racket</div></div></div>
+        <div class="flashcard" data-cat="objects" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">la pelota</div><div class="fc-face fc-back">ball</div></div></div>
+        <div class="flashcard" data-cat="objects" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">la cancha</div><div class="fc-face fc-back">court</div></div></div>
+        <div class="flashcard" data-cat="objects" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">la red</div><div class="fc-face fc-back">net</div></div></div>
+        <div class="flashcard" data-cat="objects" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">el compañero / la compañera</div><div class="fc-face fc-back">teammate</div></div></div>
+        <div class="flashcard" data-cat="actions" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">jugar pádel</div><div class="fc-face fc-back">to play padel</div></div></div>
+        <div class="flashcard" data-cat="actions" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">practicar</div><div class="fc-face fc-back">to practice</div></div></div>
+        <div class="flashcard" data-cat="actions" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">hacer el saque</div><div class="fc-face fc-back">to serve</div></div></div>
+        <div class="flashcard" data-cat="actions" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">ganar un punto</div><div class="fc-face fc-back">to win a point</div></div></div>
+        <div class="flashcard" data-cat="experience" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">me cuesta…</div><div class="fc-face fc-back">I find it difficult to…</div></div></div>
+        <div class="flashcard" data-cat="experience" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">me gusta porque…</div><div class="fc-face fc-back">I like it because…</div></div></div>
+        <div class="flashcard" data-cat="experience" onclick="flipCard(this)"><div class="fc-inner"><div class="fc-face fc-front">quiero mejorar…</div><div class="fc-face fc-back">I want to improve…</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="view" id="view-roleplay">
+    <div class="card">
+      <span class="badge">ROLEPLAY 1</span>
+      <h2>Un hobby nuevo <span class="sub">A new hobby</span></h2>
+      <p style="font-size:.88rem">Una persona quiere saber más sobre tu nuevo deporte. Responde con tus propias ideas.</p>
+      <div class="roleplay-box">
+        <div class="role-line"><b>Persona:</b> Hola, Komal. ¿Qué estás aprendiendo a hacer?</div>
+        <div class="role-line"><b>Komal:</b> Estoy aprendiendo a jugar pádel.</div>
+        <div class="role-line"><b>Persona:</b> ¡Qué interesante! ¿Con qué frecuencia juegas?</div>
+        <div class="role-line"><b>Komal:</b> Juego ______ veces por semana.</div>
+        <div class="role-line"><b>Persona:</b> ¿Qué te gusta del pádel?</div>
+        <div class="role-line"><b>Komal:</b> Me gusta porque ______.</div>
+        <div class="role-line"><b>Persona:</b> ¿Qué te cuesta más?</div>
+        <div class="role-line"><b>Komal:</b> Me cuesta ______.</div>
+      </div>
+      <div class="note">Reto: añade una pregunta para la otra persona. Por ejemplo: <em>¿Tú practicas algún deporte?</em><span class="sub">Challenge: add a question for the other person.</span></div>
+    </div>
+
+    <div class="card">
+      <span class="badge">ROLEPLAY 2</span>
+      <h2>El último partido <span class="sub">The last match</span></h2>
+      <p style="font-size:.88rem">Cuenta una experiencia reciente usando el pasado.</p>
+      <div class="roleplay-box">
+        <div class="role-line"><b>Amigo/a:</b> ¿Jugaste pádel el fin de semana pasado?</div>
+        <div class="role-line"><b>Komal:</b> Sí, jugué el ______.</div>
+        <div class="role-line"><b>Amigo/a:</b> ¿Con quién jugaste?</div>
+        <div class="role-line"><b>Komal:</b> Jugué con ______.</div>
+        <div class="role-line"><b>Amigo/a:</b> ¿Cómo fue el partido?</div>
+        <div class="role-line"><b>Komal:</b> Fue ______. Ganamos / Perdimos, pero ______.</div>
+        <div class="role-line"><b>Amigo/a:</b> ¿Qué aprendiste?</div>
+        <div class="role-line"><b>Komal:</b> Aprendí a ______.</div>
+      </div>
+      <textarea class="answer" id="lastMatch" rows="4" placeholder="Escribe 3–4 frases sobre tu último partido…"></textarea>
+      <button class="check-btn" onclick="saveText('lastMatch','matchFeedback')">Guardar mi respuesta</button>
+      <div class="feedback" id="matchFeedback"></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-grammar">
+    <div class="card">
+      <h2>Estoy aprendiendo… <span class="sub">I am learning…</span></h2>
+      <div class="grammar-box">
+        <h3>Estar + gerundio</h3>
+        Usamos esta estructura para una acción en progreso ahora o en esta etapa de la vida.<br>
+        <strong>Estoy aprendiendo</strong> a jugar pádel.<br>
+        <strong>Estoy practicando</strong> mi saque.
+        <span class="sub">We use this structure for an action in progress now or during this period of life.</span>
+      </div>
+      <table>
+        <tr><th>Infinitivo</th><th>Gerundio</th><th>Ejemplo</th></tr>
+        <tr><td>aprender</td><td>aprendiendo</td><td>Estoy aprendiendo a jugar.</td></tr>
+        <tr><td>practicar</td><td>practicando</td><td>Estoy practicando mucho.</td></tr>
+        <tr><td>mejorar</td><td>mejorando</td><td>Estoy mejorando mi saque.</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Me gusta / Me cuesta <span class="sub">I like / I find it difficult</span></h2>
+      <div class="grammar-box">
+        <h3>Opiniones y dificultades</h3>
+        <strong>Me gusta + sustantivo / infinitivo:</strong> Me gusta el pádel. Me gusta jugar con amigos.<br>
+        <strong>Me cuesta + infinitivo:</strong> Me cuesta controlar la pelota. Me cuesta hacer el saque.
+      </div>
+      <p style="font-size:.88rem;margin-top:12px">Completa:</p>
+      <p style="font-size:.88rem;margin-top:10px">Me gusta <input class="answer inline-answer" id="g1" placeholder="…"> porque es divertido.</p>
+      <p style="font-size:.88rem;margin-top:10px">Me cuesta <input class="answer inline-answer" id="g2" placeholder="…">, pero practico mucho.</p>
+      <button class="check-btn" onclick="checkGrammar()">Revisar mis frases</button>
+      <div class="feedback" id="grammarFeedback"></div>
+    </div>
+
+    <div class="card">
+      <h2>Quiero mejorar <span class="sub">I want to improve</span></h2>
+      <div class="grammar-box">
+        <h3>Querer + infinitivo</h3>
+        Para hablar de una meta usamos <strong>quiero + verbo en infinitivo</strong>.<br>
+        Quiero <strong>mejorar</strong> mi revés. · Quiero <strong>practicar</strong> más. · Quiero <strong>jugar</strong> mejor.
+      </div>
+      <div class="note">Recuerda: después de <strong>quiero</strong> usamos el verbo en su forma básica: <em>quiero mejorar</em>, no <em>quiero mejoro</em>.<span class="sub">Remember: after quiero we use the infinitive.</span></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-progress">
+    <div class="card">
+      <h2>Mi progreso en esta clase <span class="sub">My progress in this class</span></h2>
+      <p style="font-size:.86rem">Marca lo que ya puedes hacer en español.</p>
+      <div style="margin-top:14px">
+        <label style="display:block;font-size:.88rem;margin:9px 0"><input type="checkbox" class="progress-check" onchange="updateProgress()"> Puedo nombrar objetos básicos de pádel.<span class="sub">I can name basic padel equipment.</span></label>
+        <label style="display:block;font-size:.88rem;margin:9px 0"><input type="checkbox" class="progress-check" onchange="updateProgress()"> Puedo decir con qué frecuencia juego.<span class="sub">I can say how often I play.</span></label>
+        <label style="display:block;font-size:.88rem;margin:9px 0"><input type="checkbox" class="progress-check" onchange="updateProgress()"> Puedo expresar lo que me gusta y lo que me cuesta.<span class="sub">I can express likes and difficulties.</span></label>
+        <label style="display:block;font-size:.88rem;margin:9px 0"><input type="checkbox" class="progress-check" onchange="updateProgress()"> Puedo hablar de mi último partido en pasado.<span class="sub">I can talk about my last match in the past.</span></label>
+        <label style="display:block;font-size:.88rem;margin:9px 0"><input type="checkbox" class="progress-check" onchange="updateProgress()"> Puedo compartir una meta para mejorar.<span class="sub">I can share a goal for improvement.</span></label>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="feedback" id="progressText">0 de 5 objetivos completados.</div>
+    </div>
+
+    <div class="card">
+      <span class="badge">MI PRESENTACIÓN FINAL</span>
+      <h2>Mi perfil de jugador <span class="sub">My player profile</span></h2>
+      <div class="profile-box">
+        Hola, me llamo <input class="answer inline-answer" id="pName" placeholder="Komal">. Estoy aprendiendo a jugar pádel desde hace <input class="answer inline-answer" id="pTime" placeholder="dos meses">.<br><br>
+        Normalmente juego <input class="answer inline-answer" id="pFrequency" placeholder="dos veces por semana"> con <input class="answer inline-answer" id="pPeople" placeholder="mis amigos">.<br><br>
+        Me gusta el pádel porque <input class="answer inline-answer" id="pLike" placeholder="es divertido">. Me cuesta <input class="answer inline-answer" id="pDifficulty" placeholder="hacer el saque">.<br><br>
+        Mi objetivo es <input class="answer inline-answer" id="pGoal" placeholder="mejorar mi revés"> y voy a <input class="answer inline-answer" id="pPlan" placeholder="practicar más">.
+      </div>
+      <button class="check-btn" onclick="createProfile()">Crear mi presentación</button>
+      <div class="feedback" id="profileFeedback"></div>
+    </div>
+
+    <div class="card">
+      <h2>Mini quiz <span class="sub">Quick review</span></h2>
+      <p style="font-size:.88rem">¿Cuál frase es correcta?</p>
+      <button class="quiz-option" onclick="checkQuiz(this,false)">Yo hago pádel dos veces por semana.</button>
+      <button class="quiz-option" onclick="checkQuiz(this,true)">Yo juego pádel dos veces por semana.</button>
+      <button class="quiz-option" onclick="checkQuiz(this,false)">Yo soy pádel dos veces por semana.</button>
+      <div class="feedback" id="quizFeedback"></div>
+    </div>
+  </div>
+</main>
+
+<footer>Clase 5 · Español con Komal · ¡Buena práctica y buen partido!</footer>
+
+<script>
+  function showView(name) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    document.querySelector('[data-view="' + name + '"]').classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function flipCard(card) { card.classList.toggle('flipped'); }
+
+  function filterCards(category, button) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+    button.classList.add('active-filter');
+    document.querySelectorAll('.flashcard').forEach(card => {
+      const show = category === 'all' || card.dataset.cat === category;
+      card.style.display = show ? 'flex' : 'none';
+      card.classList.remove('flipped');
+    });
+  }
+
+  function saveText(id, feedbackId) {
+    const value = document.getElementById(id).value.trim();
+    document.getElementById(feedbackId).textContent = value.length > 10 ? '¡Muy bien! Ya tienes una historia para compartir en voz alta.' : 'Escribe un poco más: intenta usar al menos 3 frases.';
+  }
+
+  function checkGrammar() {
+    const one = document.getElementById('g1').value.trim();
+    const two = document.getElementById('g2').value.trim();
+    document.getElementById('grammarFeedback').textContent = one && two ? '¡Excelente! Lee tus dos frases en voz alta.' : 'Completa las dos frases para practicar.';
+  }
+
+  function updateProgress() {
+    const total = document.querySelectorAll('.progress-check').length;
+    const completed = document.querySelectorAll('.progress-check:checked').length;
+    const percent = (completed / total) * 100;
+    document.getElementById('progressFill').style.width = percent + '%';
+    document.getElementById('progressText').textContent = completed + ' de ' + total + ' objetivos completados.';
+  }
+
+  function createProfile() {
+    const get = id => document.getElementById(id).value.trim() || '_____';
+    const text = 'Hola, me llamo ' + get('pName') + '. Estoy aprendiendo a jugar pádel desde hace ' + get('pTime') + '. Normalmente juego ' + get('pFrequency') + ' con ' + get('pPeople') + '. Me gusta el pádel porque ' + get('pLike') + '. Me cuesta ' + get('pDifficulty') + '. Mi objetivo es ' + get('pGoal') + ' y voy a ' + get('pPlan') + '.';
+    document.getElementById('profileFeedback').innerHTML = '<strong>¡Tu presentación!</strong><br>' + text;
+  }
+
+  function checkQuiz(button, correct) {
+    document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('correct','wrong'));
+    button.classList.add(correct ? 'correct' : 'wrong');
+    document.getElementById('quizFeedback').textContent = correct ? '¡Correcto! Decimos “jugar pádel”.' : 'Casi. Para este deporte decimos “jugar pádel”.';
+  }
+</script>
+</body>
+</html>
