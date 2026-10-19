@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Komal · Clase 9: Ordering Food</title>
+<style>
+:root{--pink:#F92B75;--pink-light:#FFE3EC;--ink:#2a2a35;--muted:#6b6b7b;--bg:#fff7fa;--ok:#1e9e6a;--bad:#d6335c}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--pink);color:#fff;padding:22px 20px 14px}header h1{margin:0;font-size:1.4rem}header p{margin:4px 0 12px;opacity:.9;font-size:.9rem}
+nav{display:flex;gap:6px;flex-wrap:wrap}nav button{border:0;background:rgba(255,255,255,.2);color:#fff;padding:8px 14px;border-radius:20px;cursor:pointer;font-weight:600}
+nav button.active{background:#fff;color:var(--pink)}
+main{max-width:760px;margin:0 auto;padding:18px}.view{display:none}.view.active{display:block}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(249,43,117,.08);border:1px solid var(--pink-light)}
+.sub{color:var(--muted);font-weight:400;font-size:.8rem}h2{margin-top:0;font-size:1.1rem}
+.tag{display:inline-block;background:var(--pink-light);color:var(--pink);border-radius:10px;padding:2px 10px;font-size:.75rem;font-weight:700;margin-bottom:8px}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--pink-light);border-radius:10px;padding:10px 12px;margin:6px 0;cursor:pointer;font-size:.95rem}
+.opt:hover{border-color:var(--pink)}.opt.ok{border-color:var(--ok);background:#e8f8f1}.opt.bad{border-color:var(--bad);background:#fdebf0}
+.fb{font-size:.85rem;margin-top:6px;color:var(--muted)}
+.fi{border:2px solid var(--pink-light);border-radius:10px;padding:9px;font:inherit;width:55%}
+.bar{height:10px;background:var(--pink-light);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--pink);transition:width .3s}
+.btn{background:var(--pink);color:#fff;border:0;border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer}
+textarea{width:100%;min-height:90px;border:2px solid var(--pink-light);border-radius:10px;padding:10px;font:inherit}
+table{width:100%;border-collapse:collapse;font-size:.9rem}td,th{padding:8px;border-bottom:1px solid var(--pink-light);text-align:left}
+.say{background:var(--pink-light);border-radius:10px;padding:8px 12px;margin:6px 0;font-size:.95rem}
+</style></head><body>
+<header><h1>Clase 9 · Ordering Food</h1><p>Komal's Spanish Journey · Pedir comida y contar lo que pasó (pretérito)</p>
+<nav><button data-v="vocab" class="active">Vocabulario</button><button data-v="pret">Pretérito</button><button data-v="quiz">Práctica</button><button data-v="role">Roleplay</button></nav></header>
+<main>
+<div class="view active" id="view-vocab">
+<div class="card"><span class="tag">Objetivo</span><h2>Lo que vas a poder hacer <span class="sub">Learning outcome</span></h2><p>Pedir comida y bebida, entender un menú sencillo y contar una comida que ya pasó usando el pretérito.</p><p class="sub">Order food and drinks, understand a simple menu, and tell about a meal that already happened using the preterite.</p></div>
+<div class="card"><span class="tag">Vocabulario</span><h2>En el restaurante <span class="sub">At the restaurant</span></h2>
+<table><tr><th>Español</th><th>English</th></tr><tr><td>el plato</td><td>dish</td></tr><tr><td>la bebida</td><td>drink</td></tr><tr><td>la cuenta</td><td>the check</td></tr><tr><td>la propina</td><td>tip</td></tr><tr><td>el mesero / la mesera</td><td>waiter / waitress</td></tr><tr><td>la entrada, el plato fuerte, el postre</td><td>starter, main course, dessert</td></tr></table></div>
+<div class="card"><span class="tag">Platos típicos</span><h2>Comida colombiana <span class="sub">Typical dishes</span></h2><p>El ajiaco, la bandeja paisa y la arepa.</p><p class="sub">Pregunta a tu profe cuál probó y cuál recomienda. Ask your teacher which one they tried and which one they recommend.</p></div>
+<div class="card"><span class="tag">Frases útiles</span><h2>Para pedir <span class="sub">Useful phrases</span></h2>
+<div class="say">Quisiera un ajiaco, por favor.</div><div class="say">¿Qué me recomienda?</div><div class="say">¿Qué lleva este plato?</div><div class="say">Para tomar, un jugo sin azúcar.</div><div class="say">Disculpe, ¿me trae la cuenta, por favor?</div></div></div>
+<div class="view" id="view-pret">
+<div class="card"><span class="tag">Pretérito regular</span><h2>Terminaciones <span class="sub">Endings</span></h2>
+<table><tr><th>Persona</th><th>-ar (pedir no, probar)</th><th>-er (comer)</th><th>-ir (salir)</th></tr><tr><td>yo</td><td>probé</td><td>comí</td><td>salí</td></tr><tr><td>tú</td><td>probaste</td><td>comiste</td><td>saliste</td></tr><tr><td>él / ella / usted</td><td>probó</td><td>comió</td><td>salió</td></tr><tr><td>nosotros</td><td>probamos</td><td>comimos</td><td>salimos</td></tr><tr><td>ellos / ustedes</td><td>probaron</td><td>comieron</td><td>salieron</td></tr></table>
+<p class="sub">Fíjate en las tildes: probé, comí, salí, probó, comió, salió.</p></div>
+<div class="card"><span class="tag">Pretérito irregular</span><h2>Cuatro verbos de restaurante <span class="sub">Four useful verbs</span></h2>
+<table><tr><th>Persona</th><th>pedir</th><th>ir</th><th>ser</th><th>estar</th></tr><tr><td>yo</td><td>pedí</td><td>fui</td><td>fui</td><td>estuve</td></tr><tr><td>tú</td><td>pediste</td><td>fuiste</td><td>fuiste</td><td>estuviste</td></tr><tr><td>él / ella</td><td>pidió</td><td>fue</td><td>fue</td><td>estuvo</td></tr><tr><td>nosotros</td><td>pedimos</td><td>fuimos</td><td>fuimos</td><td>estuvimos</td></tr><tr><td>ellos</td><td>pidieron</td><td>fueron</td><td>fueron</td><td>estuvieron</td></tr></table>
+<p class="sub">Ir y ser tienen la misma forma en pretérito; el contexto indica cuál es. «Fui al restaurante» (ir). «La comida fue deliciosa» (ser).</p></div>
+<div class="card"><span class="tag">Marcadores</span><h2>Palabras de tiempo <span class="sub">Time markers</span></h2><p>ayer, anoche, el sábado pasado, la semana pasada, hace dos días.</p></div></div>
+<div class="view" id="view-quiz"><div class="card"><div style="display:flex;justify-content:space-between"><b>Progreso <span class="sub">Progress</span></b><span id="cnt">0/16</span></div><div class="bar"><i id="pf"></i></div><p id="score" style="font-weight:700;color:var(--pink);margin-bottom:0"></p></div><div id="qs"></div><button class="btn" onclick="resetAll()" style="background:var(--pink-light);color:var(--pink)">Reiniciar</button></div>
+<div class="view" id="view-role">
+<div class="card"><span class="tag">Roleplay 1</span><h2>Pedir en un restaurante <span class="sub">Order a meal</span></h2><p>Tu profe es el mesero. Pide una entrada, un plato fuerte y una bebida. Pregunta qué recomienda y pide la cuenta.</p></div>
+<div class="card"><span class="tag">Roleplay 2</span><h2>Con una restricción <span class="sub">With a dietary need</span></h2><p>Tu profe es el mesero. Explica que no comes algo y pregunta qué lleva el plato.</p></div>
+<div class="card"><span class="tag">Relato</span><h2>Mi última comida fuera <span class="sub">My last meal out</span></h2><p>Cuenta a tu profe una comida en un restaurante. Usa al menos cinco verbos en pretérito: fui, pedí, comí, probé, pagué, fue...</p>
+<textarea id="wr" placeholder="Anoche fui a..."></textarea></div></div>
+</main>
+<script>
+const Q=[
+{q:"Ayer yo ___ un ajiaco.",o:["pedí","pido","pidió"],a:0,e:"Yo + pretérito de pedir: pedí."},
+{q:"Anoche mi amiga ___ una bandeja paisa.",o:["pidió","pedí","pidieron"],a:0,e:"Ella + pretérito de pedir: pidió (la e cambia a i)."},
+{q:"El sábado pasado nosotros ___ en un restaurante.",o:["comimos","comemos","comieron"],a:0,e:"Nosotros + pretérito de comer: comimos."},
+{q:"Yo ___ al restaurante con mi equipo.",o:["fui","fue","voy"],a:0,e:"Yo + pretérito de ir: fui."},
+{q:"La comida ___ deliciosa.",o:["fue","fui","fueron"],a:0,e:"Ser en pretérito, tercera persona singular: fue."},
+{q:"Tú ___ una arepa con queso, ¿verdad?",o:["probaste","probé","probó"],a:0,e:"Tú + pretérito de probar: probaste."},
+{q:"Ellos ___ la cuenta al final.",o:["pidieron","pedieron","pidió"],a:0,e:"Ellos + pretérito de pedir: pidieron."},
+{q:"Ayer yo ___ en el restaurante dos horas.",o:["estuve","estaba","estuvo"],a:0,e:"Yo + pretérito de estar: estuve."},
+{q:"Quieres pedir un plato. ¿Qué dices?",o:["Quisiera un ajiaco, por favor.","Yo quiero ajiaco ahora ya.","Ajiaco yo pido."],a:0,e:"«Quisiera» es cortés y natural al pedir."},
+{q:"Quieres saber qué ingredientes tiene el plato.",o:["¿Qué lleva este plato?","¿Qué llevas plato?","¿Cuál lleva?"],a:0,e:"«¿Qué lleva este plato?» pregunta por los ingredientes."},
+{q:"Terminaste de comer. ¿Qué dices?",o:["Disculpe, ¿me trae la cuenta, por favor?","Disculpe, ¿yo traigo la cuenta?","La cuenta yo quiero."],a:0,e:"Pedir un favor: ¿me trae...?"},
+{q:"Hace dos días nosotros ___ al centro.",o:["fuimos","vamos","fueron"],a:0,e:"Nosotros + pretérito de ir: fuimos."},
+{q:"Ayer yo ___ (comer) una arepa.",f:["comí"],e:"Pretérito de comer: comí."},
+{q:"Anoche ella ___ (pedir) un jugo.",f:["pidió"],e:"Pretérito de pedir: pidió."},
+{q:"Ayer nosotros ___ (ir) a un restaurante.",f:["fuimos"],e:"Pretérito de ir: fuimos."},
+{q:"El sábado pasado yo ___ (probar) el ajiaco.",f:["probé"],e:"Pretérito de probar: probé."}];
+const KEY='k9';
+const S=JSON.parse(localStorage.getItem(KEY)||'{"a":{},"w":""}');
+function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+function ok(i){const q=Q[i],a=S.a[i];if(a===undefined)return false;return q.f?norm(a.v)===norm(q.f[0]):a===q.a}
+function show(v){document.querySelectorAll('.view').forEach(e=>e.classList.toggle('active',e.id==='view-'+v));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.v===v))}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.v));
+function mark(i){const q=Q[i],g=ok(i),f=document.getElementById('fb'+i);
+if(q.f){f.textContent=(g?'Correcto. ':'Casi. La respuesta es «'+q.f[0]+'». ')+q.e;f.style.color=g?'var(--ok)':'var(--bad)';return}
+document.getElementById('qs').children[i].querySelectorAll('.opt').forEach(b=>{const j=+b.dataset.j;if(j===q.a)b.classList.add('ok');else if(j===S.a[i])b.classList.add('bad')});
+f.textContent=(g?'Correcto. ':'Casi. ')+q.e}
+function upd(){const n=Object.keys(S.a).length;let t=0;Q.forEach((q,i)=>{if(ok(i))t++});document.getElementById('cnt').textContent=n+'/'+Q.length;document.getElementById('pf').style.width=(n/Q.length*100)+'%';document.getElementById('score').textContent=n===Q.length?'Resultado: '+t+'/'+Q.length:''}
+function renderQ(){const box=document.getElementById('qs');box.innerHTML='';
+Q.forEach((q,i)=>{const d=document.createElement('div');d.className='card';
+d.innerHTML='<p><b>'+(i+1)+'.</b> '+q.q+'</p>';
+const fb=document.createElement('div');fb.className='fb';fb.id='fb'+i;
+if(q.f){const row=document.createElement('div');row.innerHTML='<input class="fi" placeholder="Escribe aquí"> <button class="btn" style="padding:8px 14px">Revisar</button>';
+const inp=row.querySelector('input'),bt=row.querySelector('button');
+if(S.a[i]!==undefined){inp.value=S.a[i].v;inp.disabled=true;bt.disabled=true}
+bt.onclick=()=>{if(!inp.value.trim())return;S.a[i]={v:inp.value.trim()};save();inp.disabled=true;bt.disabled=true;mark(i);upd()};
+d.appendChild(row)}
+else{q.o.map((t,j)=>[t,j]).sort((a,b)=>((a[1]*7+i*3)%5)-((b[1]*7+i*3)%5)).forEach(([t,j])=>{const b=document.createElement('button');b.className='opt';b.textContent=t;b.dataset.j=j;b.onclick=()=>{if(S.a[i]!==undefined)return;S.a[i]=j;save();mark(i);upd()};d.appendChild(b)})}
+d.appendChild(fb);box.appendChild(d);if(S.a[i]!==undefined)mark(i)})}
+const wr=document.getElementById('wr');wr.value=S.w||'';wr.oninput=()=>{S.w=wr.value;save()};
+function resetAll(){localStorage.removeItem(KEY);location.reload()}
+renderQ();upd();
+</script></body></html>

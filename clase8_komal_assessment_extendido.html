@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Komal · Clase 8: Assessment</title>
+<style>
+:root{--pink:#F92B75;--pink-light:#FFE3EC;--ink:#2a2a35;--muted:#6b6b7b;--bg:#fff7fa;--ok:#1e9e6a;--bad:#d6335c}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--pink);color:#fff;padding:22px 20px 14px}header h1{margin:0;font-size:1.4rem}header p{margin:4px 0 12px;opacity:.9;font-size:.9rem}
+nav{display:flex;gap:6px;flex-wrap:wrap}nav button{border:0;background:rgba(255,255,255,.2);color:#fff;padding:8px 14px;border-radius:20px;cursor:pointer;font-weight:600}
+nav button.active{background:#fff;color:var(--pink)}
+main{max-width:760px;margin:0 auto;padding:18px}.view{display:none}.view.active{display:block}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(249,43,117,.08);border:1px solid var(--pink-light)}
+.sub{color:var(--muted);font-weight:400;font-size:.8rem}h2{margin-top:0;font-size:1.1rem}
+.tag{display:inline-block;background:var(--pink-light);color:var(--pink);border-radius:10px;padding:2px 10px;font-size:.75rem;font-weight:700;margin-bottom:8px}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--pink-light);border-radius:10px;padding:10px 12px;margin:6px 0;cursor:pointer;font-size:.95rem}
+.opt:hover{border-color:var(--pink)}.opt.ok{border-color:var(--ok);background:#e8f8f1}.opt.bad{border-color:var(--bad);background:#fdebf0}
+.fb{font-size:.85rem;margin-top:6px;color:var(--muted)}
+.fi{border:2px solid var(--pink-light);border-radius:10px;padding:9px;font:inherit;width:55%}
+.bar{height:10px;background:var(--pink-light);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--pink);transition:width .3s}
+.btn{background:var(--pink);color:#fff;border:0;border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer}.btn.ghost{background:var(--pink-light);color:var(--pink)}
+.rate{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.rate button{flex:1;min-width:110px;border:2px solid var(--pink-light);background:#fff;border-radius:10px;padding:8px;cursor:pointer}.rate button.sel{border-color:var(--pink);background:var(--pink-light);font-weight:700}
+textarea{width:100%;min-height:80px;border:2px solid var(--pink-light);border-radius:10px;padding:10px;font:inherit}
+table{width:100%;border-collapse:collapse;font-size:.9rem}td,th{padding:8px;border-bottom:1px solid var(--pink-light);text-align:left}
+</style></head><body>
+<header><h1>Clase 8 · Assessment <span style="font-weight:400">Check-in</span></h1><p>Komal's Spanish Journey · 25 minutos · Clases 2 a 7</p>
+<nav><button data-v="intro" class="active">Cómo funciona</button><button data-v="quiz">Quiz</button><button data-v="speak">Hablar</button><button data-v="result">Mi resultado</button></nav></header>
+<main>
+<div class="view active" id="view-intro"><div class="card"><h2>Cómo funciona <span class="sub">How it works</span></h2>
+<p>Este check-in revisa lo que hemos practicado: direcciones, transporte, plan del día, pádel, Perú y pasado. No es un examen. Sirve para ver qué ya sale solo y qué necesita otra vuelta.</p>
+<p class="sub">A quick check-in, not an exam. It shows what already feels automatic and what needs one more round.</p>
+<p><b>1.</b> Quiz de 26 preguntas: 20 de opción múltiple y 6 para completar, con corrección inmediata (12 min).<br><b>2.</b> Cuatro retos para hablar con tu profe (8 min).<br><b>3.</b> Mi resultado: puntaje por tema y autoevaluación (5 min).</p>
+<button class="btn" onclick="show('quiz')">Empezar →</button></div></div>
+<div class="view" id="view-quiz"><div class="card"><div style="display:flex;justify-content:space-between"><b>Progreso <span class="sub">Progress</span></b><span id="cnt">0/26</span></div><div class="bar"><i id="pf"></i></div></div><div id="qs"></div></div>
+<div class="view" id="view-speak">
+<div class="card"><span class="tag">Reto 1 · Perú</span><h2>En un restaurante en Lima <span class="sub">At a restaurant in Lima</span></h2><p>Pide un plato sin ají, pregunta el precio y pide la cuenta. Hazlo en voz alta con tu profe en máximo 1 minuto.</p><p class="sub">Order a dish without ají, ask the price, ask for the check. About 1 minute.</p><div class="rate" data-k="s1"></div></div>
+<div class="card"><span class="tag">Reto 2 · Pasado</span><h2>Mi infancia <span class="sub">My childhood</span></h2><p>Cuéntale a tu profe cómo era tu ciudad cuando eras niña y qué hiciste el fin de semana pasado. Usa mínimo tres verbos en imperfecto y tres en pretérito.</p><p class="sub">Describe your city as a child and your last weekend. Three imperfect and three preterite verbs.</p><div class="rate" data-k="s2"></div></div>
+<div class="card"><span class="tag">Reto 3 · Direcciones</span><h2>Estoy perdida <span class="sub">I'm lost</span></h2><p>Tu profe es un transeúnte en Bogotá. Pregunta cómo llegar a una estación y repite las instrucciones para confirmar que entendiste.</p><p class="sub">Ask a passerby for directions and repeat them back.</p><div class="rate" data-k="s3"></div></div>
+<div class="card"><span class="tag">Reto 4 · Plan del día</span><h2>Mi sábado ideal <span class="sub">My ideal Saturday</span></h2><p>Cuenta tu plan del sábado con primero, después, luego y por último. Incluye un imprevisto y cómo lo resuelves.</p><p class="sub">Tell your Saturday plan with sequence words and one unexpected problem.</p><div class="rate" data-k="s4"></div></div>
+<div class="card"><span class="tag">Escritura</span><h2>Dos frases para cerrar <span class="sub">Two closing sentences</span></h2><p>Escribe cómo llegar de tu casa a un lugar que te guste, con dos instrucciones.</p><textarea id="wr" placeholder="Para llegar a..."></textarea></div></div>
+<div class="view" id="view-result"><div class="card"><h2>Mi resultado <span class="sub">My result</span></h2><div id="total" style="font-size:1.6rem;font-weight:800;color:var(--pink)">0/26</div><div class="bar"><i id="rf"></i></div><br><table id="tb"></table></div>
+<div class="card"><h2>¿Cómo me sentí? <span class="sub">How did it feel?</span></h2><div id="selfs"></div></div>
+<button class="btn ghost" onclick="resetAll()">Reiniciar</button></div>
+</main>
+<script>
+const Q=[{"t": "Direcciones", "en": "Directions", "q": "Estás en Bogotá y preguntas: «Perdón, ¿cómo llego a la estación?». ¿Cuál respuesta es correcta?", "o": ["Siga derecho dos cuadras y gire a la izquierda.", "Yo sigo derecho dos cuadras y gira a la izquierda.", "Seguir derecho dos cuadras y girar izquierdo."], "a": 0, "e": "Con «usted» se usa el imperativo formal: siga, gire."}, {"t": "Direcciones", "en": "Directions", "q": "La farmacia está ___ del banco, en la misma esquina.", "o": ["al lado", "a lado", "en lado"], "a": 0, "e": "Se dice «al lado de»."}, {"t": "Direcciones", "en": "Directions", "q": "Gire ___ en el semáforo.", "o": ["a la derecha", "derecho a", "de derecha"], "a": 0, "e": "«Girar a la derecha / a la izquierda»."}, {"t": "Transporte", "en": "Transport", "q": "Quiero ir al aeropuerto en taxi. ¿Qué pregunto?", "o": ["¿Cuánto cuesta ir al aeropuerto?", "¿Cuánto cuestas al aeropuerto?", "¿Cuántos cuesta el aeropuerto?"], "a": 0, "e": "«Costar» concuerda con lo que cuesta: cuesta (singular)."}, {"t": "Transporte", "en": "Transport", "q": "Quieres saber si el bus va por la calle 72. ¿Qué preguntas?", "o": ["¿Este bus pasa por la calle 72?", "¿Este bus pasar la calle 72?", "¿Este bus pasando calle 72?"], "a": 0, "e": "Verbo conjugado en tercera persona: pasa."}, {"t": "Plan del día", "en": "Daily plan", "q": "Mañana ___ a visitar Monserrate con mis amigos.", "o": ["voy", "fui", "iba"], "a": 0, "e": "Futuro cercano: ir a + infinitivo."}, {"t": "Plan del día", "en": "Daily plan", "q": "Primero desayuno y ___ voy al trabajo.", "o": ["después", "antes de", "porque"], "a": 0, "e": "«Después» ordena la secuencia: primero, después, luego."}, {"t": "Plan del día", "en": "Daily plan", "q": "Si llueve, ___ al museo en lugar del parque.", "o": ["vamos", "fuimos", "íbamos"], "a": 0, "e": "Condición + presente: «si llueve, vamos»."}, {"t": "Pádel", "en": "Padel", "q": "Completa: «Estoy ___ a jugar pádel.»", "o": ["aprendiendo", "aprendo", "aprendí"], "a": 0, "e": "Estar + gerundio: acción en progreso."}, {"t": "Pádel", "en": "Padel", "q": "Quieres reservar una cancha. ¿Cuál frase es más natural?", "o": ["Quisiera reservar una cancha para las seis.", "Quiero reservo una cancha a las seis.", "Reservar cancha yo seis."], "a": 0, "e": "«Quisiera» + infinitivo es cortés y natural."}, {"t": "Pádel", "en": "Padel", "q": "Pides prestada una raqueta a un amigo. ¿Cuál es correcta?", "o": ["¿Me puedes prestar una raqueta?", "¿Me puedo prestar una raqueta?", "¿Me pueden prestando una raqueta?"], "a": 0, "e": "«¿Me puedes + infinitivo?» para pedir un favor informal."}, {"t": "Perú práctico", "en": "Peru basics", "q": "En un restaurante en Lima quieres pedir sin ají. ¿Qué dices?", "o": ["Un ceviche sin ají, por favor.", "Un ceviche no ají, por favor.", "Ceviche sin de ají."], "a": 0, "e": "«Sin» + sustantivo, sin artículo."}, {"t": "Perú práctico", "en": "Peru basics", "q": "Terminaste de comer y quieres pagar. ¿Qué dices?", "o": ["Disculpe, ¿me trae la cuenta, por favor?", "Disculpe, ¿yo traigo la cuenta?", "La cuenta yo quiero."], "a": 0, "e": "Pedir un favor: ¿me trae...?"}, {"t": "Perú práctico", "en": "Peru basics", "q": "La moneda de Perú es el ___.", "o": ["sol", "peso", "boliviano"], "a": 0, "e": "El sol peruano. Los precios se dicen en soles."}, {"t": "Perú práctico", "en": "Peru basics", "q": "Necesitas el horario del bus a Cusco. ¿Qué preguntas?", "o": ["¿A qué hora sale el próximo bus a Cusco?", "¿Qué hora sale bus Cusco próximo?", "¿Cuándo es Cusco el bus?"], "a": 0, "e": "«¿A qué hora sale...?» para horarios de salida."}, {"t": "Perú práctico", "en": "Peru basics", "q": "Estás en altura y no te sientes bien. ¿Qué dices?", "o": ["Me siento mareada.", "Me marea sentida.", "Estoy mareo."], "a": 0, "e": "«Sentirse mareada». En los Andes también se habla de «soroche»."}, {"t": "Pasado", "en": "Past", "q": "Cuando era niña, ___ en el parque todos los días.", "o": ["jugaba", "jugué", "juego"], "a": 0, "e": "Imperfecto para hábitos del pasado."}, {"t": "Pasado", "en": "Past", "q": "Ayer ___ a mi abuela por videollamada.", "o": ["llamé", "llamaba", "llamo"], "a": 0, "e": "Pretérito para una acción terminada."}, {"t": "Pasado", "en": "Past", "q": "Estaba en casa cuando ___ el teléfono.", "o": ["sonó", "sonaba", "suena"], "a": 0, "e": "Pretérito para la acción que interrumpe; imperfecto para el fondo (estaba)."}, {"t": "Pasado", "en": "Past", "q": "El año pasado ___ a Bogotá por primera vez.", "o": ["llegué", "llegaba", "llego"], "a": 0, "e": "Pretérito: acción terminada con marca de tiempo."}, {"t": "Plan del día", "en": "Daily plan", "q": "Yo ___ (ir) al trabajo en TransMilenio todos los días.", "f": ["voy"], "e": "Presente de ir: yo voy."}, {"t": "Direcciones", "en": "Directions", "q": "(seguir, usted) ___ derecho dos cuadras.", "f": ["siga"], "e": "Imperativo formal: siga."}, {"t": "Pasado", "en": "Past", "q": "De niña, yo ___ (jugar) en la calle con mis primos.", "f": ["jugaba"], "e": "Imperfecto de jugar: jugaba."}, {"t": "Pasado", "en": "Past", "q": "Ayer yo ___ (comer) arroz con pollo.", "f": ["comi"], "e": "Pretérito de comer: comí."}, {"t": "Pádel", "en": "Padel", "q": "Estoy ___ (aprender) a jugar pádel.", "f": ["aprendiendo"], "e": "Gerundio: aprendiendo."}, {"t": "Perú práctico", "en": "Peru basics", "q": "Quisiera un jugo ___ azúcar, por favor.", "f": ["sin"], "e": "«Sin» indica ausencia."}];
+const KEY='k8b';
+const S=JSON.parse(localStorage.getItem(KEY)||'{"a":{},"r":{},"w":""}');
+function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+function ok(i){const q=Q[i],a=S.a[i];if(a===undefined)return false;return q.f?q.f.map(norm).includes(norm(a.v)):a===q.a}
+function show(v){document.querySelectorAll('.view').forEach(e=>e.classList.toggle('active',e.id==='view-'+v));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));if(v==='result')result()}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.v));
+function renderQ(){const box=document.getElementById('qs');box.innerHTML='';
+Q.forEach((q,i)=>{const d=document.createElement('div');d.className='card';
+d.innerHTML='<span class="tag">'+q.t+' · '+q.en+'</span><p><b>'+(i+1)+'.</b> '+q.q+'</p>';
+const fb=document.createElement('div');fb.className='fb';fb.id='fb'+i;
+if(q.f){const row=document.createElement('div');row.innerHTML='<input class="fi" placeholder="Escribe aquí"> <button class="btn" style="padding:8px 14px">Revisar</button>';
+const inp=row.querySelector('input'),bt=row.querySelector('button');
+if(S.a[i]!==undefined){inp.value=S.a[i].v;inp.disabled=true;bt.disabled=true}
+bt.onclick=()=>{if(!inp.value.trim())return;S.a[i]={v:inp.value.trim()};save();inp.disabled=true;bt.disabled=true;mark(i);upd()};
+d.appendChild(row)}
+else{const order=q.o.map((t,j)=>[t,j]).sort((a,b)=>((a[1]*7+i*3)%5)-((b[1]*7+i*3)%5));
+order.forEach(([t,j])=>{const b=document.createElement('button');b.className='opt';b.textContent=t;b.dataset.j=j;b.onclick=()=>{if(S.a[i]!==undefined)return;S.a[i]=j;save();mark(i);upd()};d.appendChild(b)})}
+d.appendChild(fb);box.appendChild(d);if(S.a[i]!==undefined)mark(i)})}
+function mark(i){const q=Q[i],g=ok(i),f=document.getElementById('fb'+i);
+if(q.f){f.textContent=(g?'Correcto. ':'Casi. La respuesta es «'+q.f[0]+'». ')+q.e;f.style.color=g?'var(--ok)':'var(--bad)';return}
+const d=document.getElementById('qs').children[i];
+d.querySelectorAll('.opt').forEach(b=>{const j=+b.dataset.j;if(j===q.a)b.classList.add('ok');else if(j===S.a[i])b.classList.add('bad')});
+f.textContent=(g?'Correcto. ':'Casi. ')+q.e}
+function upd(){const n=Object.keys(S.a).length;document.getElementById('cnt').textContent=n+'/'+Q.length;document.getElementById('pf').style.width=(n/Q.length*100)+'%'}
+const L=[['no','Aún no'],['help','Con ayuda'],['yes','Lo logré']];
+document.querySelectorAll('.rate').forEach(r=>{L.forEach(([k,t])=>{const b=document.createElement('button');b.textContent=t;if(S.r[r.dataset.k]===k)b.classList.add('sel');b.onclick=()=>{S.r[r.dataset.k]=k;save();r.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')};r.appendChild(b)})});
+const wr=document.getElementById('wr');wr.value=S.w||'';wr.oninput=()=>{S.w=wr.value;save()};
+function result(){const tops={};let tot=0;
+Q.forEach((q,i)=>{tops[q.t]=tops[q.t]||[0,0];tops[q.t][1]++;if(ok(i)){tops[q.t][0]++;tot++}});
+let h='<tr><th>Tema</th><th>Aciertos</th><th>Siguiente paso</th></tr>';
+for(const t in tops){const [a,n]=tops[t];h+='<tr><td>'+t+'</td><td>'+a+'/'+n+'</td><td>'+(a===n?'Mantener con práctica oral':a<=n/2?'Repasar en la próxima clase':'Revisar los errores y repetir')+'</td></tr>'}
+document.getElementById('tb').innerHTML=h;document.getElementById('total').textContent=tot+'/'+Q.length;document.getElementById('rf').style.width=(tot/Q.length*100)+'%';
+const lab={no:'Aún no',help:'Con ayuda',yes:'Lo logré'};
+document.getElementById('selfs').innerHTML='Reto Perú: <b>'+(lab[S.r.s1]||'sin marcar')+'</b><br>Reto pasado: <b>'+(lab[S.r.s2]||'sin marcar')+'</b><br>Reto direcciones: <b>'+(lab[S.r.s3]||'sin marcar')+'</b><br>Reto plan del día: <b>'+(lab[S.r.s4]||'sin marcar')+'</b>'}
+function resetAll(){localStorage.removeItem(KEY);location.reload()}
+renderQ();upd();
+</script></body></html>
